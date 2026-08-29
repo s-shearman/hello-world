@@ -362,7 +362,7 @@ Two mechanisms, deliberately unconnected:
 | Question | Mechanism | Answer for VIC procurement |
 |---|---|---|
 | Which state taxes the wage? | `wage_nexus_determination` (§4.1) | **VIC, 100%. No split.** |
-| Which offices bear the cost? | `person_allocation` (below) | Spread across all four |
+| Which offices bear the cost? | `cost_allocation` (below) | Spread across all four |
 | How does that cost reach a rate? | `overhead_policy` (§11.7) | Per office, after allocation |
 
 #### The allocation tables
@@ -373,15 +373,20 @@ allocation_driver                                   -- lookup, extendable
   -- seeded: fixed_pct, office_headcount, office_billable_hours,
   --         office_revenue, office_hours_sold, delivered_hours_actual
 
-person_allocation                                   -- EFFECTIVE-DATED
-  person_id, driver_code
+cost_allocation                                     -- EFFECTIVE-DATED
+  subject_type      person | expense | expense_category
+  subject_id                                        -- one engine, any cost subject
+  driver_code
   scope             single_office | listed_offices | all_offices
   valid_from, valid_to, note
 
-person_allocation_target
-  person_allocation_id, office_id
+cost_allocation_target
+  cost_allocation_id, office_id
   pct                                               -- only when driver = fixed_pct
 ```
+
+The same engine allocates operating expenses (Layer 5), which is why `subject_type`
+exists rather than a second, parallel set of tables.
 
 **Everyone carries an allocation, and the ordinary case is the degenerate one.** A Perth
 technician is `fixed_pct / single_office / 100% Perth`. Nothing about the normal case
@@ -506,6 +511,140 @@ Rules the engine enforces:
 The exemption catalogue itself (the tests, their day limits and percentage thresholds)
 lives in the ruleset with a source URL per entry — see §7 — so I am not writing day
 counts into the schema from memory.
+
+---
+
+## Layer 5 — Operating expenses and overheads
+
+Everything above costs money because someone is paid. This layer covers the rest: rent,
+vehicles, software, insurance, warehouse operations. Held at planning grain, not
+general-ledger grain.
+
+**Scope boundary, the same shape as the demand tool.** This is not accounting. Xero, or
+whatever you run, stays the source of truth for what was actually spent. This layer holds
+the annualised, categorised figures needed to build a cost rate and an office result, with
+an optional trial-balance mapping later so the numbers reconcile rather than get retyped.
+
+### L5.1 The line between a cost component and an expense
+
+The most valuable rule in this layer, because getting it wrong double-counts:
+
+> **If it attaches to a person, it is a cost component (Layer 3).
+> If it attaches to the business, it is an expense (Layer 5).**
+
+A vehicle allowance paid to a named technician is a cost component. Six utes on lease is
+an expense. A laptop issued to someone is a cost component; the ERP site licence is an
+expense. The tool warns when both sides are populated for the same thing — a person
+carrying a `vehicle_*` component while the fleet category also has per-head steps —
+because that is exactly how you end up paying for the same ute twice.
+
+### L5.2 Tables
+
+```
+expense_category                                    -- extendable, hierarchical
+  id, parent_id, code, label
+  behaviour          fixed | variable_with_headcount
+                     | variable_with_hours | step_fixed
+  default_driver_code                               -- default allocation driver
+  display_order, notes
+  -- seeded groups:
+  --   property        office_rent, warehouse_rent, outgoings, utilities,
+  --                   cleaning, security, make_good
+  --   fleet           vehicle_lease, registration, insurance, maintenance,
+  --                   fuel_card, tolls
+  --   technology      erp_licences, design_software, m365, telephony,
+  --                   network, hardware_refresh
+  --   insurance       public_liability, professional_indemnity,
+  --                   business_pack, cyber
+  --   professional    accounting, legal, audit, consulting
+  --   warehouse_ops   racking, forklift, consumables, freight_inwards,
+  --                   stocktake, waste
+  --   tooling         test_equipment, calibration, tool_replacement
+  --   compliance      licences, memberships, certifications
+  --   sales_marketing marketing, tender_costs, non_project_travel
+  --   finance_charges interest, bank_fees, merchant_fees, bad_debts
+
+expense                                             -- EFFECTIVE-DATED
+  id, expense_category_id, entity_id
+  office_id, jurisdiction_code                      -- NULL = national / shared
+  supplier_ref, description
+  amount_cents, frequency   annual | monthly | quarterly | weekly | one_off
+  basis                     actual | budget | forecast
+  contract_start, contract_end, review_date
+  escalation_pct                                    -- CPI or fixed annual review
+  includes_labour_component                         -- ! routing flag, see L5.4
+  valid_from, valid_to, note
+
+expense_period                                      -- materialised per period
+  expense_id, period_start, period_end
+  amount_cents, is_actual
+
+expense_step                                        -- see L5.3
+  expense_id, driver
+  threshold_value, step_amount_cents
+  step_type      recurring | one_off
+  note
+```
+
+`contract_end` and `review_date` are not decoration. A warehouse lease expiring in
+fourteen months inside a model you are using to plan headcount is information you want
+surfaced, so expiring contracts appear on the exposure view alongside tax thresholds.
+
+### L5.3 Step costs — the part that changes the hire decision
+
+This is the reason to model overheads properly rather than as a flat percentage.
+
+Warehouse rent is not linear in headcount. Ten more technicians may cost nothing extra
+until you need a second bay, another forklift, or six more utes — and then it steps, hard.
+A model that spreads overhead evenly per head will tell you the eleventh hire costs the
+same as the tenth. It does not.
+
+```
+expense_step
+  driver   field_headcount | total_headcount | vehicles_required
+           | warehouse_m2 | stock_value | concurrent_jobs | office_desks
+  threshold_value          -- e.g. every 12 field staff
+  step_amount_cents        -- what crossing it adds
+  step_type                -- recurring (a second lease) | one_off (fit-out)
+```
+
+Two consequences worth stating plainly:
+
+- **The hire-versus-subcontract comparison must include the step.** If your next employee
+  triggers a $40k/yr vehicle and warehouse step, that belongs in the employee side of the
+  comparison. It is frequently the single largest term and it is the one most often left
+  out.
+- **Subcontracting usually avoids the step**, because a labour hire crew arrives with its
+  own vehicle, tools and no desk. That is a real structural argument for subcontracting
+  that a naive per-hour comparison cannot see. The tool should be able to make the
+  argument *against* hiring when the argument is sound.
+
+So the hire-versus-subcontract output (§11.5) reports the marginal cost of the next hire
+including any overhead step it triggers, and names the step.
+
+### L5.4 What this layer must never touch
+
+Expenses are not wages. They never enter taxable wages, the deemed wages register, or any
+threshold calculation. There is exactly one path from this layer to the tax layer, and it
+is a routing rule rather than a calculation:
+
+**`includes_labour_component`.** A monthly IT support retainer from a sole trader, a
+cleaning contract, a security contract, a labour-only freight arrangement — all look like
+overheads on an invoice, and all can be relevant contracts for payroll tax. When the flag
+is set, the tool **refuses to treat the line as an expense** and routes you to create a
+supplier engagement in Layer 4, where the contractor provisions apply properly and the
+days tests run.
+
+The flag is raised, not decided. Whether such a contract is caught turns on the facts and
+the evidence, which is a question for your accountant — but a tool that silently files it
+under "rent and outgoings" guarantees nobody ever asks.
+
+### L5.5 Allocation uses the same engine
+
+Office rent is `fixed_pct / single_office / 100%` — it already belongs to one office. The
+ERP licence, group insurance and the accountant's fee are `office_headcount / all_offices`,
+or whichever driver you pick. Same engine as §5.5, same 100% invariant, same reconciliation
+report, same trace. No second allocation system to keep in step with the first.
 
 ---
 
@@ -818,6 +957,7 @@ scenario_change
   scenario_id, change_type    add_person | remove_person | change_role | change_office
                               | change_remuneration | add_engagement | change_efficiency
                               | change_sell_rate | change_utilisation
+                              | add_expense | change_expense | remove_expense
   payload jsonb, effective_from, note
 ```
 Scenarios are **overlays**, never mutations of base data. Any scenario diffs against
@@ -831,9 +971,14 @@ Shared roles (§5.5) make this a two-stage problem, and conflating the stages is
 office P&Ls become unarguable-with:
 
 ```
-stage 1  ATTRIBUTION   person cost → offices          via person_allocation
-stage 2  RECOVERY      office overhead pool → rate    via overhead_policy
+stage 1  ATTRIBUTION   person cost + operating expenses → offices   via cost_allocation
+stage 2  RECOVERY      office overhead pool → rate per hour         via overhead_policy
 ```
+
+The pool is **non-billable role cost plus allocated operating expenses** (Layer 5). The
+rate build-up shows the overhead loading as its own visible line, broken down by category
+group, rather than folded invisibly into one number — so when a cost rate moves you can
+see whether it was a pay review or the warehouse lease.
 
 ```
 overhead_policy
@@ -898,7 +1043,13 @@ None of these block me starting; each changes a detail:
 7. **What do you export from today** for people, hours and supplier invoices? Drives the
    CSV importer shapes.
 8. **Who else will use this**, and should they see individual remuneration? Confirms §2.4.
-9. **Which allocation driver should be the reporting default** for shared roles — headcount,
+9. **Where do overhead figures come from** — a Xero export by account code, or will you
+   enter the fifteen or twenty lines that matter by hand? And do you want budget and
+   actual side by side, or budget only for now?
+10. **What are your real step points?** How many field staff per warehouse bay, per
+   forklift, per additional ute? These drive the hire decision more than anything else in
+   Layer 5, and only you know them.
+11. **Which allocation driver should be the reporting default** for shared roles — headcount,
    revenue share, or hours sold? I will compute all of them regardless; this only sets
    which one the office view opens on. Related: **which other roles are shared** besides
    procurement — I would guess finance, and possibly parts of sales and warehousing.
