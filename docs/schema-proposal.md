@@ -334,6 +334,98 @@ so a Perth tech and a Melbourne tech get different counts without you entering e
 
 ---
 
+### 5.5 Shared and multi-state roles
+
+You raised procurement: based in VIC, serving all four states. This is two different
+questions wearing one hat, and they must not share a field.
+
+**For payroll tax: no split.** Wages are taxed by the state in which they are taken to
+have been paid, resolved by the nexus provisions in §4.1 — one jurisdiction per person
+per month, decided by where the services were performed and the remaining limbs of that
+hierarchy. It is *not* apportioned by which offices benefit from the work. A procurement
+manager sitting in Melbourne buying gear for a Perth job is VIC wages. That four states
+benefit is irrelevant to the assessment.
+
+The exception turns on **performance, not benefit**: if that person actually spends a
+month working in WA, the nexus test can land the month in WA. That is a determination
+about where they were and what they did, not about who the work was for — and it is
+exactly the kind of question to put in front of your accountant. The schema copes
+because determinations are per person per period, so one month can differ from the
+months around it.
+
+**For internal performance: yes, split.** Otherwise VIC carries the entire procurement
+cost and looks structurally unprofitable, while NSW, QLD and WA look better than they
+are. That distortion is the whole reason the question is worth asking.
+
+Two mechanisms, deliberately unconnected:
+
+| Question | Mechanism | Answer for VIC procurement |
+|---|---|---|
+| Which state taxes the wage? | `wage_nexus_determination` (§4.1) | **VIC, 100%. No split.** |
+| Which offices bear the cost? | `person_allocation` (below) | Spread across all four |
+| How does that cost reach a rate? | `overhead_policy` (§11.7) | Per office, after allocation |
+
+#### The allocation tables
+
+```
+allocation_driver                                   -- lookup, extendable
+  code, label, basis
+  -- seeded: fixed_pct, office_headcount, office_billable_hours,
+  --         office_revenue, office_hours_sold, delivered_hours_actual
+
+person_allocation                                   -- EFFECTIVE-DATED
+  person_id, driver_code
+  scope             single_office | listed_offices | all_offices
+  valid_from, valid_to, note
+
+person_allocation_target
+  person_allocation_id, office_id
+  pct                                               -- only when driver = fixed_pct
+```
+
+**Everyone carries an allocation, and the ordinary case is the degenerate one.** A Perth
+technician is `fixed_pct / single_office / 100% Perth`. Nothing about the normal case
+changes — a shared role is the same mechanism with different parameters, not a special
+case bolted on beside it. Your VIC procurement manager is `office_headcount /
+all_offices`, and the split recomputes each period as headcount moves; or `fixed_pct` if
+you would rather it stayed still and was argued about once a year.
+
+Two invariants the database enforces:
+
+- Allocations for a person in any period **sum to exactly 100%**. Cost cannot silently
+  vanish or be counted twice.
+- A reconciliation report proves `total person cost == Σ allocated cost across offices`
+  for every period. This is what catches the bug where someone edits an office's dates
+  and 4% of a salary quietly disappears.
+
+#### Billable people who work across states
+
+The same mechanism covers a VIC commissioning engineer who flies to Perth, with a
+different driver: `delivered_hours_actual`, so their cost follows the hours they actually
+delivered per office rather than a fixed guess. But their **capacity** also has to appear
+in more than one pool:
+
+```
+person_capacity_scope                               -- which offices can draw on this person
+  person_id, office_id
+  max_pct_of_capacity                               -- optional cap, e.g. WA draws at most 25%
+  valid_from, valid_to
+```
+
+Without this, the Perth capacity dashboard reports a shortfall it does not have, and the
+tool tells you to hire someone you already employ.
+
+#### The honest caveat
+
+There is no objectively correct allocation driver. Headcount, revenue and hours-sold give
+different answers, and the gap between them is routinely wide enough to flip which state
+looks like it is performing. So the office view computes the result under **every** driver
+and shows the spread, with one marked as your reporting default. If NSW is profitable
+under headcount and unprofitable under revenue share, you want to know that before you
+act on either number — the sensitivity *is* the finding.
+
+---
+
 ## 6. Layer 4 — Supplier and engagement
 
 ```
@@ -733,15 +825,36 @@ actuals or against another scenario on total cost, margin, capacity and threshol
 position. Because the calc engine is pure and runs in the browser, editing a scenario
 updates every figure without a save.
 
-### 11.7 Overhead recovery
+### 11.7 Overhead attribution and recovery — two stages, not one
+
+Shared roles (§5.5) make this a two-stage problem, and conflating the stages is how
+office P&Ls become unarguable-with:
+
+```
+stage 1  ATTRIBUTION   person cost → offices          via person_allocation
+stage 2  RECOVERY      office overhead pool → rate    via overhead_policy
+```
+
 ```
 overhead_policy
   scenario_id, method       per_billable_hour | per_office | by_revenue_share
   params jsonb, note
 ```
-All three methods are computed on every run and shown together, because they give
-different answers and the difference is itself the information. One is marked as your
-reporting default.
+
+All three recovery methods are computed on every run and shown together, because they
+give different answers and the difference is itself the information. One is marked as
+your reporting default.
+
+**The office performance view carries a toggle**: direct cost only, versus direct plus
+allocated share. Both are true and they answer different questions — direct-only is what
+the office manager controls, direct-plus-allocated is whether the office pays for itself.
+Showing only one invites the argument that the other was hidden.
+
+Every allocated dollar is traceable in both directions: an office's cost line expands to
+*"$X allocated from 3 shared roles under driver `office_headcount`"*, naming the people
+and the driver value used. A state manager who disputes their number can see exactly what
+produced it, which is the difference between a figure people act on and a figure people
+relitigate.
 
 ---
 
@@ -785,6 +898,10 @@ None of these block me starting; each changes a detail:
 7. **What do you export from today** for people, hours and supplier invoices? Drives the
    CSV importer shapes.
 8. **Who else will use this**, and should they see individual remuneration? Confirms §2.4.
+9. **Which allocation driver should be the reporting default** for shared roles — headcount,
+   revenue share, or hours sold? I will compute all of them regardless; this only sets
+   which one the office view opens on. Related: **which other roles are shared** besides
+   procurement — I would guess finance, and possibly parts of sales and warehousing.
 
 ---
 
