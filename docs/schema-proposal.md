@@ -593,14 +593,56 @@ warehouse bay"*, driving overhead automatically. **Cutting it.** You run one war
 per state, positions get filled when they are needed, and you know your own step points better
 than a formula would.
 
-It is also redundant. Adding a warehouse person and adding a warehouse are the same action in
-this model — a discrete decision you make, model, and then commit. `scenario_change` already
-does that (§11.6), and does it more honestly, because it makes you name the cost rather than
-inferring it from a rule that will be wrong at the edges.
+Correcting something I wrote when I first cut it: I said adding a warehouse and adding a
+warehouse person were the same action. **They are not.** A new or small location gets premises
+well before it warrants a dedicated resource. They are independent decisions with independent
+triggers — property follows geography and stock, headcount follows workload — and the model has
+to let them move separately. It already does: `expense` carries an `office_id` and knows nothing
+about headcount.
 
-So `expense_step` comes out. If you later want the tool to *warn* rather than *calculate* —
-"this scenario puts nineteen field staff against one warehouse" — that is a soft flag on a
-scenario, not a cost model, and it is cheap to add at the time.
+Both are still discrete decisions rather than formula outputs, which is why `scenario_change`
+(§11.6) covers them and `expense_step` is not needed. But they are two decisions, not one.
+
+### L5.3.1 Where the work goes when there is no dedicated resource
+
+This is why that correction is worth more than a footnote.
+
+If a small Perth site has a warehouse but no warehouse person, the warehousing does not stop
+happening. A technician picks and receives, a project coordinator chases a delivery, or the
+warehouse manager in another state covers it remotely. That work is real cost, and by default
+it lands in the wrong place twice over:
+
+- it is **missing from the non-billable pool**, so the coverage test reads better than reality;
+  and
+- it is **hidden inside a billable person's utilisation**, so the capacity model credits that
+  technician with hours they do not have.
+
+Both errors point the same way — everything looks slightly better than it is — which is the
+most dangerous kind.
+
+```
+office_function_coverage                            -- EFFECTIVE-DATED
+  office_id
+  function_code    warehousing | procurement | project_admin | finance
+  coverage_mode    dedicated_role | absorbed_by_roles
+                   | covered_from_office | outsourced | none
+  covered_by_person_id, covered_by_office_id, supplier_id
+  hours_per_week                                    -- the absorbed load
+  valid_from, valid_to, note
+```
+
+Absorbed hours do two things at once: they come **out** of that person's billable capacity, and
+they go **into** the non-billable pool, costed at that person's fully loaded rate. The function
+is charged where it is actually being performed, and the technician stops appearing to have
+capacity they are spending on picking.
+
+That also makes the maturity path visible without calculating it. **"One warehouse worker per
+state" is a target end-state, not an invariant.** A new location starts at `absorbed_by_roles`
+and moves to `dedicated_role` when you decide it should. The tool does not decide and does not
+infer a threshold — it reports the absorbed load you have entered, and shows it rising:
+*"WA is absorbing 14 hours a week of warehousing across three technicians — 0.37 FTE of billable
+capacity."* The decision then presents itself at roughly the right time, instead of being
+noticed a year late.
 
 ### L5.4 What this layer must never touch
 
@@ -1239,6 +1281,10 @@ coverage from 108% to 94%; holding coverage at 100% moves the admin fee from 7.5
 That is the whole loop you described, on one screen.
 
 Two things that will bite if left implicit:
+
+**The pool includes absorbed function cost (§L5.3.1), not just people with non-billable job
+titles.** Warehousing done by a technician at a site with no warehouse person is warehouse cost;
+leaving it out flatters the coverage figure.
 
 **"Covering those wages" has to mean fully loaded cost, not salary.** Superannuation, workers
 compensation, payroll tax, leave, vehicle, phone and the rest sit on top and routinely add 25
