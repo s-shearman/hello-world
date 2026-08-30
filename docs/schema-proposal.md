@@ -741,6 +741,157 @@ quietly lies, and the tool refuses to do it.
 
 ---
 
+### L5.8 Setting the admin charge — the method, and its failure modes
+
+Your method: sum shared resource cost (warehouse manager, finance, head of projects,
+procurement manager), divide by the revenue target to get a percentage, then vary it by
+project type — fixed below a threshold, higher percentages for mid, large and builder work.
+
+**The arithmetic is right and it is the right place to start.** Shared cost ÷ revenue gives
+the blended rate you have to recover, and everyone in the business should know that number.
+Varying by project type is also right, because shared resource consumption genuinely is not
+proportional to revenue. And a fixed fee below a threshold is right for the obvious reason:
+on a $3k job a percentage yields a couple of hundred dollars, which does not cover the
+procurement manager touching it once.
+
+Five things I would change or watch.
+
+#### 1. The denominator is a target, so the charge only works if you hit it
+
+Set the rate at target, miss the target, under-recover — and you find out at year end. I
+would set the rate against a deliberately conservative revenue figure, say 90% of target,
+so a normal year over-recovers slightly rather than a soft year under-recovering badly. The
+tool then reports recovery at target, at forecast and at actual, and the revenue level where
+recovery breaks even.
+
+```
+overhead_recovery_charge
+  + denominator_basis    revenue_target | conservative_target | prior_year_actual
+  + conservatism_pct     -- e.g. 90, meaning rate set on 90% of target
+```
+
+#### 2. Cost ÷ revenue recovers cost and nothing else
+
+Set to exactly cover shared resource cost, the charge contributes zero margin. That may be
+precisely what you intend — cover overhead, make margin on labour and equipment. But make it
+a decision rather than an accident, so the charge splits into its two components:
+
+```
+overhead_recovery_charge
+  + recovery_component_pct    -- what covers the shared cost pool
+  + premium_component_pct     -- deliberate margin or risk loading on top
+```
+
+#### 3. Tier cliffs get gamed, by your own people first
+
+A fixed fee up to $X and a percentage above it creates a cliff. A job at $X + $1 suddenly
+carries a materially different charge, so jobs get split into two, or discounted to duck
+under the line. Make the tiers **progressive, like a tax bracket** — fixed fee up to $X,
+then a percentage on the excess above it. Smoother, much harder to game, and far easier to
+defend to a client who asks why.
+
+```
+overhead_recovery_charge
+  structure     flat_pct | fixed | progressive_bands
+
+overhead_recovery_band                              -- marginal bands, not a lookup
+  charge_id, band_from_cents, band_to_cents
+  fixed_component_cents, pct_of_excess
+  applies_to_channel                                -- builder bands can differ
+```
+
+This is the same shape as the payroll tax threshold logic in §8.3, and for the same reason:
+a cliff makes the marginal decision wrong, whether the decision is a hire or a quote.
+
+#### 4. One percentage of revenue blends drivers that are genuinely different
+
+Your shared roles do not scale with the same thing:
+
+| Shared role | What actually drives its workload |
+|---|---|
+| Warehouse manager | Equipment volume and value |
+| Procurement manager | Supplier count, order lines, hardware value |
+| Finance | Invoice and transaction count |
+| Head of projects | Project count and complexity — not dollars |
+
+A single percentage of revenue over-charges a labour-heavy install for a warehouse it barely
+touched, and under-charges a hardware-heavy fit-out that filled the racking for three weeks.
+
+But a four-driver charge is unquotable and nobody wants to explain it to a client. So:
+**keep one simple client-facing charge, and model the multi-driver version internally as the
+check.**
+
+```
+shared_cost_driver                                  -- internal consumption model
+  subject_type   role | expense_category
+  subject_id
+  driver   equipment_value | supplier_order_lines | invoice_count
+           | project_count | labour_hours | contract_value
+  weight, note
+```
+
+The tool computes what each project type *should* pay on a consumption basis, compares it
+with what your tiered percentage actually collects, and reports the **cross-subsidy**: which
+project types are carrying which. You then set the tiers deliberately, instead of discovering
+the cross-subsidy in next year's result. Simple on the outside, honest on the inside.
+
+#### 5. Ask what the builder premium is actually for
+
+A higher percentage on builder work is defensible if builders genuinely consume more — more
+coordination, more variations, more site meetings, more reporting. It is also defensible as a
+premium for worse payment terms, retention and back-charge risk. Both are real, but **they
+are different charges**.
+
+If the premium is really a risk premium, it belongs in margin, not in overhead recovery.
+Otherwise your recovery position reads as healthy when what you actually hold is a risk
+buffer — and you will trim the charge in a competitive tender without realising what you just
+gave away. This is what `premium_component_pct` in point 2 is for: same number to the client,
+two components internally.
+
+#### And before you set any of it — backtest it
+
+Run the proposed tiers over the last twelve months of actual projects and see what they would
+have collected against what shared resource actually cost.
+
+```
+charge_backtest_run
+  id, proposed_charge_id, period_start, period_end
+  projects_included, would_have_collected_cents
+  shared_cost_actual_cents, recovery_pct
+  by_project_type jsonb, by_channel jsonb, by_office jsonb
+```
+
+That turns *"8% feels about right"* into *"this recovers 103% of last year's shared cost, and
+small jobs are being subsidised by four points."* It is cheap, it is the single strongest
+thing you can put in front of a board, and it needs one input the model does not yet have.
+
+### L5.9 The project register
+
+Tiering by project value and backtesting both need projects as records, not just a
+`project_ref` string:
+
+```
+client
+  id, name, abn, channel_default, payment_terms_days, notes
+
+project
+  id, project_ref, name, client_id
+  office_id, jurisdiction_code, job_type_id
+  channel            direct | builder | consultant | dealer | internal
+  contract_value_cents
+  labour_value_cents, equipment_value_cents         -- the split that drives consumption
+  status, won_date, delivery_start, delivery_end
+  source_system, external_id                        -- imported, not hand-maintained
+```
+
+This is a thin register, deliberately. It holds what the charge and the backtest need —
+value, split, type, channel, office, dates — and nothing else. Project management stays
+wherever it lives today; the `labour_value` / `equipment_value` split is the only field that
+may not already exist in a form you can export, and it is the one that makes the consumption
+model work.
+
+---
+
 ## 7. Efficiency model
 
 Since efficiency is currently delivery judgement, the schema's job is to make those
@@ -1167,20 +1318,23 @@ None of these block me starting; each changes a detail:
 7. **What do you export from today** for people, hours and supplier invoices? Drives the
    CSV importer shapes.
 8. **Who else will use this**, and should they see individual remuneration? Confirms §2.4.
-9. **What is the project admin charge, exactly?** A percentage of project labour, of total
+9. **Can you export a project register for the last 12 months** — value, labour/equipment
+   split, type, channel, office, dates? Without it the backtest in §L5.8 cannot run, and
+   the backtest is the thing that makes the charge defensible.
+10. **What is the project admin charge today, exactly?** A percentage of project labour, of total
    project value, or a fixed amount per project — and what is the current rate? Any floor
    or cap? Does it vary by office or job type?
-10. **Do your sell rates currently carry overhead as well?** This is the double-count
+11. **Do your sell rates currently carry overhead as well?** This is the double-count
    question in §L5.7. If the rate card was built with a loading in it *and* you charge
    admin on top, your real margin differs from your reported margin, in one direction or
    the other.
-11. **What covers property, fleet and technology?** The admin charge covers non-billable
+12. **What covers property, fleet and technology?** The admin charge covers non-billable
    staff. If those are meant to come out of gross margin, I will assign them to the
    rate-loaded pool; if nothing covers them, that is worth seeing stated.
-12. **What are your real step points?** How many field staff per warehouse bay, per
+13. **What are your real step points?** How many field staff per warehouse bay, per
    forklift, per additional ute? These drive the hire decision more than anything else in
    Layer 5, and only you know them.
-13. **Which other roles are shared** besides procurement? I would guess finance, and
+14. **Which other roles are shared** besides procurement? I would guess finance, and
    possibly parts of sales and warehousing.
 
 ---
@@ -1200,6 +1354,40 @@ None of these block me starting; each changes a detail:
 
 I would rather show you working numbers for your actual headcount at step 4 than a
 complete UI over invented data.
+
+---
+
+## 15. Getting sign-off — who to involve, and when
+
+Three different conversations, and running them as one is how a tool like this stalls.
+
+**Now, with your accountant — not the C-suite.** Specialist questions whose answers change
+the outputs rather than the design:
+
+- Nexus treatment for shared roles: the VIC-based procurement manager (§5.5).
+- Classification of your labour hire and subcontract arrangements, and which contractor
+  exemptions are genuinely available and evidenced (§6.1).
+- Whether the admin charge and the sell rate are currently double-recovering overhead
+  (§L5.7). This one is a real dollars question, not a modelling nicety.
+
+**Next, with delivery and finance leads — the methodology, before any numbers exist.** The
+allocation driver is genuinely arbitrary (§5.5), and this tool will eventually produce a
+number saying which state is performing and which roles lose money at current rates. Those
+are things people own. Agree the method while it is abstract; once the numbers land, any
+disagreement about method reads as a disagreement about the result, and the conversation
+becomes about the denominator instead of the finding.
+
+**Then the C-suite, with a backtest and a live decision — not a schema.** The schema is not a
+C-suite artefact; nobody will read table definitions, and asking them to produces vague assent
+rather than buy-in. Go when you can put three things on the table:
+
+1. Current recovery position — are we covering shared cost, and by how much are we not.
+2. The proposed tier structure, backtested against last year's actual projects (§L5.8).
+3. The hire-versus-subcontract answer for one real decision you are facing anyway.
+
+That is a twenty-minute conversation with numbers in it, and it ends in a decision. The
+version where you present a data model ends in "looks good, keep going", which is not the
+same thing.
 
 ---
 
