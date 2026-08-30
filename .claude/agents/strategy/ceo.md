@@ -7,6 +7,7 @@ description: >
 model: claude-opus-5
 tools:
   - Read
+  - Write
   - WebSearch
 memory: user
 ---
