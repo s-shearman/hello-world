@@ -580,49 +580,27 @@ expense_period                                      -- materialised per period
   budget_cents                                      -- set from the expense line
   actual_cents                                      -- typed in as it lands
   variance_cents, variance_note
-
-expense_step                                        -- see L5.3
-  expense_id, driver
-  threshold_value, step_amount_cents
-  step_type      recurring | one_off
-  note
 ```
 
 `contract_end` and `review_date` are not decoration. A warehouse lease expiring in
 fourteen months inside a model you are using to plan headcount is information you want
 surfaced, so expiring contracts appear on the exposure view alongside tax thresholds.
 
-### L5.3 Step costs — the part that changes the hire decision
+### L5.3 Step costs — cut
 
-This is the reason to model overheads properly rather than as a flat percentage.
+I proposed a step-cost calculator: thresholds like *"every twelve field staff needs another
+warehouse bay"*, driving overhead automatically. **Cutting it.** You run one warehouse worker
+per state, positions get filled when they are needed, and you know your own step points better
+than a formula would.
 
-Warehouse rent is not linear in headcount. Ten more technicians may cost nothing extra
-until you need a second bay, another forklift, or six more utes — and then it steps, hard.
-A model that spreads overhead evenly per head will tell you the eleventh hire costs the
-same as the tenth. It does not.
+It is also redundant. Adding a warehouse person and adding a warehouse are the same action in
+this model — a discrete decision you make, model, and then commit. `scenario_change` already
+does that (§11.6), and does it more honestly, because it makes you name the cost rather than
+inferring it from a rule that will be wrong at the edges.
 
-```
-expense_step
-  driver   field_headcount | total_headcount | vehicles_required
-           | warehouse_m2 | stock_value | concurrent_jobs | office_desks
-  threshold_value          -- e.g. every 12 field staff
-  step_amount_cents        -- what crossing it adds
-  step_type                -- recurring (a second lease) | one_off (fit-out)
-```
-
-Two consequences worth stating plainly:
-
-- **The hire-versus-subcontract comparison must include the step.** If your next employee
-  triggers a $40k/yr vehicle and warehouse step, that belongs in the employee side of the
-  comparison. It is frequently the single largest term and it is the one most often left
-  out.
-- **Subcontracting usually avoids the step**, because a labour hire crew arrives with its
-  own vehicle, tools and no desk. That is a real structural argument for subcontracting
-  that a naive per-hour comparison cannot see. The tool should be able to make the
-  argument *against* hiring when the argument is sound.
-
-So the hire-versus-subcontract output (§11.5) reports the marginal cost of the next hire
-including any overhead step it triggers, and names the step.
+So `expense_step` comes out. If you later want the tool to *warn* rather than *calculate* —
+"this scenario puts nineteen field staff against one warehouse" — that is a soft flag on a
+scenario, not a cost model, and it is cheap to add at the time.
 
 ### L5.4 What this layer must never touch
 
@@ -1239,10 +1217,59 @@ All three recovery methods are computed on every run and shown together, because
 give different answers and the difference is itself the information. One is marked as
 your reporting default.
 
-#### Over- and under-recovery — the output this mechanism exists to produce
+#### The coverage test — the primary output
 
-Because you recover through a charge rather than an allocation, the useful number is not
-"what did overhead cost" but **"did the charge cover it"**:
+Your test is simple, and the tool should lead with it rather than bury it under recovery
+methods:
+
+> **Does the admin charge, at conservative revenue, cover the non-billable staff cost?**
+
+```
+coverage_position                                   -- derived, per office and national
+  period, office_id                                 -- NULL = national
+  non_billable_cost_cents                           -- FULLY LOADED, see below
+  charge_collected_cents                            -- at the selected revenue basis
+  coverage_pct, surplus_deficit_cents
+  charge_pct_required_for_100                       -- what the fee would need to be
+```
+
+One gauge, three numbers: coverage percentage, dollars over or short, and the fee that closes
+the gap. The hire decision reads straight off it — *"adding a Perth warehouse person takes
+coverage from 108% to 94%; holding coverage at 100% moves the admin fee from 7.5% to 8.1%."*
+That is the whole loop you described, on one screen.
+
+Two things that will bite if left implicit:
+
+**"Covering those wages" has to mean fully loaded cost, not salary.** Superannuation, workers
+compensation, payroll tax, leave, vehicle, phone and the rest sit on top and routinely add 25
+to 40 percent. A fee set against base wages under-recovers by that margin permanently, and the
+gap never appears as a line item — it shows up as margin being thinner than expected, for
+years. The pool in `coverage_position` is fully loaded cost, and the trace splits it into base
+and on-costs so the difference is visible rather than assumed.
+
+**Payroll tax on the pool is marginal, not average (§8.3).** A non-billable hire that pushes a
+state across its threshold costs more than the hire before it. The coverage test uses the
+marginal rate, so the fee impact of the *next* head is right even when the average looked
+comfortable.
+
+#### Coverage per state, not only nationally
+
+One warehouse worker per state makes warehousing a **local** cost — allocated 100% to its own
+office, not a shared national role like procurement, finance and head of projects. So the pool
+splits, and so does the test:
+
+| Pool | Roles | Allocation |
+|---|---|---|
+| National shared | Procurement, finance, head of projects | Hours sold (§5.5) |
+| State direct | Warehouse worker | 100% to its own office |
+
+That matters more than it looks. A fixed local cost against variable local volume concentrates
+the risk in your smallest state: Perth carries the same warehouse wage as Sydney on a fraction
+of the hours sold. National coverage can read 105% while WA sits at 80%, and the national
+figure on its own will tell you everything is fine. The view reports both, and defaults to
+showing the worst state alongside the national number.
+
+#### Behind that — the recovery detail
 
 ```
 overhead_recovery_position                          -- derived, per pool
@@ -1252,7 +1279,7 @@ overhead_recovery_position                          -- derived, per pool
   variance_cents, recovery_pct
 ```
 
-Three views come off it, and the third is the one worth building:
+Three further views come off it:
 
 1. **Recovery position** per office, per period, cumulative for the year. *"The admin charge
    recovers 82% of non-billable cost in QLD."*
@@ -1331,10 +1358,7 @@ None of these block me starting; each changes a detail:
 12. **What covers property, fleet and technology?** The admin charge covers non-billable
    staff. If those are meant to come out of gross margin, I will assign them to the
    rate-loaded pool; if nothing covers them, that is worth seeing stated.
-13. **What are your real step points?** How many field staff per warehouse bay, per
-   forklift, per additional ute? These drive the hire decision more than anything else in
-   Layer 5, and only you know them.
-14. **Which other roles are shared** besides procurement? I would guess finance, and
+13. **Which other roles are shared** besides procurement? I would guess finance, and
    possibly parts of sales and warehousing.
 
 ---
