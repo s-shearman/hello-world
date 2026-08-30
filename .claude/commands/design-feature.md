@@ -3,7 +3,7 @@ Phase 1 design gate. Produces design artifacts before any implementation.
 
 Pre-flight: if the work touches Phase 0 triggers (pricing, cross-product events, third-party integration, auth/security) and no ADR exists for the strategic call, run `/csuite` first.
 
-Form: `superpowers:brainstorming` drives discovery before agents write anything.
+Form: `brainstorming` drives discovery before agents write anything.
 
 Spawn: Lead=product-owner,
        + system-architect,

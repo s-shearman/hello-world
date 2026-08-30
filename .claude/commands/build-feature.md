@@ -3,7 +3,7 @@ Phase 3 implementation gate. Requires Phase 1 design + Phase 2 plan to exist.
 
 Pre-flight: confirm ADR (`docs/decisions/`), UX spec (`docs/ux/`), and plan (`docs/plans/`). If any missing, stop and run `/design-feature` or `/plan` first.
 
-Discipline: `superpowers:executing-plans` for orchestration, `superpowers:test-driven-development` per agent, `superpowers:verification-before-completion` before any "done" claim.
+Discipline: `executing-plans` for orchestration, `test-driven-development` per agent, `verification-before-completion` before any "done" claim.
 
 Spawn: Lead=product-owner,
        + backend-dev, frontend-dev (or mobile-dev),
