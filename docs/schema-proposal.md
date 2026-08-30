@@ -577,7 +577,9 @@ expense                                             -- EFFECTIVE-DATED
 
 expense_period                                      -- materialised per period
   expense_id, period_start, period_end
-  amount_cents, is_actual
+  budget_cents                                      -- set from the expense line
+  actual_cents                                      -- typed in as it lands
+  variance_cents, variance_note
 
 expense_step                                        -- see L5.3
   expense_id, driver
@@ -645,6 +647,97 @@ Office rent is `fixed_pct / single_office / 100%` — it already belongs to one 
 ERP licence, group insurance and the accountant's fee are `office_headcount / all_offices`,
 or whichever driver you pick. Same engine as §5.5, same 100% invariant, same reconciliation
 report, same trace. No second allocation system to keep in step with the first.
+
+**Default driver: hours sold.** You confirmed staff-per-state follows hours sold, so
+`office_hours_sold` is the reporting default for shared roles and national overheads. The
+other drivers stay computed and visible alongside it — see the caveat in §5.5.
+
+### L5.6 Budget, actual, and which one feeds a rate
+
+You will type these in, budget and actual. So the grid is category × period, with budget
+seeded from the expense line's `amount_cents` and `frequency`, and actuals entered as they
+land. Variance is derived, never entered.
+
+That leaves a real question the tool must not answer silently: **which figure builds a cost
+rate?** Three bases, selectable per calculation run and recorded in the trace:
+
+| Basis | What it is | Use it for |
+|---|---|---|
+| `budget` | The plan, whole year | Next year's rate card; scenarios |
+| `actual` | What was actually spent | Historical office performance; the year in review |
+| `blended` | Actuals to date + budget for remaining periods | **Default.** The best forward estimate mid-year |
+
+`blended` is the default because in March neither of the other two is right: budget ignores
+what has already happened, and actual-annualised over-weights a quarter that had the
+insurance renewal in it. Every output states which basis it used, because a rate card built
+on budget and an office result built on actual are not comparable and will be compared
+anyway.
+
+### L5.7 Recovery pools and the project admin charge
+
+You recover non-billable staff through an admin charge applied to every project. That is a
+real commercial mechanism producing real revenue, not a notional allocation — which means
+the model needs both, and needs to compare them.
+
+It also means **your overheads are not all recovered the same way**. The admin charge covers
+non-billable staff. Property, fleet, technology and insurance are recovered somewhere else —
+in the sell rate, or in gross margin, or not at all. So overhead is not one pool:
+
+```
+recovery_pool                                       -- extendable
+  id, code, label
+  recovery_method   project_admin_charge | loaded_into_sell_rate
+                    | per_billable_hour | not_recovered
+  charge_id                                         -- FK when project_admin_charge
+  note
+  -- seeded: admin_charge_pool  (non-billable roles)
+  --         rate_loaded_pool   (property, fleet, technology, insurance)
+  --         below_the_line     (interest, bad debts — deliberately unrecovered)
+
+cost_pool_assignment                                -- EFFECTIVE-DATED
+  subject_type   role | expense_category | person | expense
+  subject_id, recovery_pool_id
+  valid_from, valid_to
+  -- precedence: person/expense → role/expense_category → default pool
+
+overhead_recovery_charge                            -- the charge itself
+  id, name
+  basis      pct_of_project_labour | pct_of_project_value | per_project_fixed
+             | per_billable_hour | tiered_by_project_value
+  rate_value
+  applies_to  all_projects | by_office | by_job_type | by_client
+  scope_ref_id
+  min_charge_cents, max_charge_cents                -- floor and cap per project
+  valid_from, valid_to, note
+
+project_admin_charge_line                           -- what was actually charged
+  project_ref, office_id, period_start, period_end
+  basis_amount_cents                                -- what the rate was applied to
+  charge_cents, is_actual
+```
+
+#### The trap: do not recover the same overhead twice
+
+If the admin charge sits on the project as its own line, then **the technician sell rate
+must not also carry that overhead**. Loading non-billable staff cost into the hourly rate
+*and* charging admin on top charges the client twice and tells you your margin is better
+than it is. The same in reverse: if you strip overhead out of the rate and the admin charge
+does not actually cover it, you are selling at a loss and the rate card will say you are
+fine.
+
+So every sell rate carries its convention explicitly, and the margin calculation respects
+it:
+
+```
+sell_rate
+  + overhead_treatment   recovered_in_rate | recovered_via_admin_charge
+```
+
+The rate card view (§11.4) then asks the right question for each rate: for
+`recovered_via_admin_charge` rates, does the sell rate cover **direct** cost — person cost
+plus payroll tax, no overhead? For `recovered_in_rate` rates, does it cover **fully loaded**
+cost? Mixing the two conventions in one comparison is the most common way a rate card
+quietly lies, and the tool refuses to do it.
 
 ---
 
@@ -931,6 +1024,11 @@ contribution after overhead under each of the three recovery methods, and the ut
 required to break even. Any role whose sell rate does not cover actual cost is
 highlighted, ranked by annualised dollars lost rather than by percentage.
 
+Each rate is tested against the right cost base for its `overhead_treatment` (§L5.7):
+direct cost for rates recovered via the admin charge, fully loaded cost for rates that
+carry overhead themselves. The view labels which convention each rate is on, so nobody
+compares two rates that are not measuring the same thing.
+
 ```
 sell_rate
   role_id, jurisdiction_code, office_id             -- office optional
@@ -990,6 +1088,32 @@ All three recovery methods are computed on every run and shown together, because
 give different answers and the difference is itself the information. One is marked as
 your reporting default.
 
+#### Over- and under-recovery — the output this mechanism exists to produce
+
+Because you recover through a charge rather than an allocation, the useful number is not
+"what did overhead cost" but **"did the charge cover it"**:
+
+```
+overhead_recovery_position                          -- derived, per pool
+  office_id, recovery_pool_id, period
+  overhead_cost_allocated_cents                     -- what landed here (L5.5)
+  overhead_recovered_cents                          -- what the charge collected
+  variance_cents, recovery_pct
+```
+
+Three views come off it, and the third is the one worth building:
+
+1. **Recovery position** per office, per period, cumulative for the year. *"The admin charge
+   recovers 82% of non-billable cost in QLD."*
+2. **Breakeven charge rate** — what the charge would have to be to fully recover the pool.
+   Directly actionable: *"you charge 7.5%, you need 9.2%."*
+3. **Recovery sensitivity to volume.** Your overhead cost is largely fixed; your recovery is
+   a percentage of project volume. So a slow year under-recovers twice over — fewer projects
+   carrying an unchanged cost base. The tool reports **the hours-sold level at which recovery
+   breaks even**, plotted against the capacity burn-down, so a demand shortfall and an
+   overhead shortfall appear on the same axis. They are the same event and are usually
+   discovered separately, months apart.
+
 **The office performance view carries a toggle**: direct cost only, versus direct plus
 allocated share. Both are true and they answer different questions — direct-only is what
 the office manager controls, direct-plus-allocated is whether the office pays for itself.
@@ -1043,16 +1167,21 @@ None of these block me starting; each changes a detail:
 7. **What do you export from today** for people, hours and supplier invoices? Drives the
    CSV importer shapes.
 8. **Who else will use this**, and should they see individual remuneration? Confirms §2.4.
-9. **Where do overhead figures come from** — a Xero export by account code, or will you
-   enter the fifteen or twenty lines that matter by hand? And do you want budget and
-   actual side by side, or budget only for now?
-10. **What are your real step points?** How many field staff per warehouse bay, per
+9. **What is the project admin charge, exactly?** A percentage of project labour, of total
+   project value, or a fixed amount per project — and what is the current rate? Any floor
+   or cap? Does it vary by office or job type?
+10. **Do your sell rates currently carry overhead as well?** This is the double-count
+   question in §L5.7. If the rate card was built with a loading in it *and* you charge
+   admin on top, your real margin differs from your reported margin, in one direction or
+   the other.
+11. **What covers property, fleet and technology?** The admin charge covers non-billable
+   staff. If those are meant to come out of gross margin, I will assign them to the
+   rate-loaded pool; if nothing covers them, that is worth seeing stated.
+12. **What are your real step points?** How many field staff per warehouse bay, per
    forklift, per additional ute? These drive the hire decision more than anything else in
    Layer 5, and only you know them.
-11. **Which allocation driver should be the reporting default** for shared roles — headcount,
-   revenue share, or hours sold? I will compute all of them regardless; this only sets
-   which one the office view opens on. Related: **which other roles are shared** besides
-   procurement — I would guess finance, and possibly parts of sales and warehousing.
+13. **Which other roles are shared** besides procurement? I would guess finance, and
+   possibly parts of sales and warehousing.
 
 ---
 
