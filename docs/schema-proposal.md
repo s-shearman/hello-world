@@ -185,17 +185,47 @@ jurisdiction** — never split across states for the same employee in the same m
 that jurisdiction is decided by a defined hierarchy of tests, applied in order until one
 resolves.
 
-The limbs the harmonised provisions draw on are the employee's principal place of
-residence, where the services were performed, the employer's registered business address,
-and the place of payment. **The order those limbs are applied in, and the tests inside
-each, are a sourced value like any rate** — they come from the ruleset, not from this
-document and not from anyone's recollection.
+The rule is **PTA039 — Payroll Tax Nexus Provisions**, a harmonised revenue ruling adopted
+across the jurisdictions and amended with effect from 1 July 2009. It works in two steps.
 
-One consequence is worth stating because it is counter-intuitive and expensive to get
-wrong: **place of payment cannot be the primary test.** If it were, every multi-state
-employer would run payroll from the lowest-rate jurisdiction and the scheme would not
-function. Where the payroll is run, and where the entity is registered, are not what
-decides this.
+**Step 1 — the wholly-performed test.** Did the employee perform services *wholly* in one
+jurisdiction during that calendar month? If yes, the wages are taxable there and the
+enquiry stops.
+
+**Step 2 — four tiered tests, applied in sequence**, only where services were not wholly
+performed in one jurisdiction:
+
+| Tier | Test |
+|---|---|
+| 1 | The employee's **principal place of residence** in that month. For a corporation deemed to be an employee, its principal place of residence is taken to be its ABN address. |
+| 2 | Where the employee has no principal place of residence in any Australian jurisdiction: the **employer's registered ABN address** or principal place of business. |
+| 3 | Where the **wages are paid**. |
+| 4 | Where the services are **mainly performed**. |
+
+Source: Revenue NSW ruling PTA039, and the harmonised equivalents published by the
+Queensland Revenue Office, RevenueSA, RevenueWA, the ACT Revenue Office and the NT
+Territory Revenue Office. Retrieved 2026-08-30.
+
+> **Sourcing status: provisional.** This ordering was established from search results
+> summarising the official rulings; the primary documents could not be retrieved directly
+> from this environment (see §16). Confirm against the primary PDF before it is entered
+> into the ruleset as a `SourcedValue`, and have the accountant confirm application.
+
+Two consequences that are counter-intuitive and worth stating plainly:
+
+**Principal place of residence outranks where the work happened.** Tier 1 is residence,
+not services. A NSW-resident technician who spends a week in Darwin has not wholly
+performed services in one jurisdiction that month, so the tiered tests run — and tier 1
+resolves immediately to NSW. The enquiry never reaches tier 4.
+
+**But a full calendar month away does move it.** If that same technician spends an entire
+calendar month working in the NT, the step 1 wholly-performed test is satisfied for the
+NT, and that month's wages are NT wages. The boundary is the calendar month, not the trip.
+
+**Place of payment is tier 3**, reached only when the employee has no Australian principal
+place of residence *and* the employer's ABN address does not resolve it. Where the payroll
+is run, and where the entity is registered, are not what decides this for an ordinary
+resident employee.
 
 The schema records the answer and its reasoning per person per period:
 
@@ -1471,9 +1501,9 @@ Three different conversations, and running them as one is how a tool like this s
 the outputs rather than the design:
 
 - Nexus treatment for shared roles: the VIC-based procurement manager (§5.5).
-- **The nexus hierarchy itself**: the order the limbs are applied in, and whether a short
-  interstate trip (a NSW technician spending a week in NT) can move a month's wages. §4.1
-  deliberately does not assert an ordering.
+- **Confirmation of the PTA039 tier ordering in §4.1** against the primary rulings, and
+  application to our actual cases: a NSW-resident technician on a multi-week NT job
+  spanning a month boundary, and a technician who relocates mid-month.
 - Whether any wages sourced outside NSW, VIC, QLD and WA trigger a registration
   obligation in that jurisdiction, and at what point.
 - Classification of your labour hire and subcontract arrangements, and which contractor
