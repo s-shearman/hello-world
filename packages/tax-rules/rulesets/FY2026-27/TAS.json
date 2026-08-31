@@ -1,0 +1,161 @@
+{
+  "jurisdiction": "TAS",
+  "financial_year": "FY2026-27",
+  "ruleset_version": "2026-27.1",
+  "rate": {
+    "kind": "tiered_by_au_wages",
+    "bands": [
+      {
+        "from_au_wages": {
+          "value": "125000000",
+          "unit": "cents",
+          "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+          "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+          "retrieved_date": "2026-08-31",
+          "note": "$1.25 million."
+        },
+        "to_au_wages": {
+          "value": "200000000",
+          "unit": "cents",
+          "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+          "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+          "retrieved_date": "2026-08-31",
+          "note": "$2.0 million."
+        },
+        "rate_ppm": {
+          "value": 40000,
+          "unit": "ppm",
+          "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+          "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+          "retrieved_date": "2026-08-31",
+          "note": "4.0%. 'There are two payroll tax thresholds and rates for the 2026-27 financial year.'"
+        }
+      },
+      {
+        "from_au_wages": {
+          "value": "200000000",
+          "unit": "cents",
+          "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+          "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+          "retrieved_date": "2026-08-31",
+          "note": "$2.0 million."
+        },
+        "to_au_wages": null,
+        "rate_ppm": {
+          "value": 61000,
+          "unit": "ppm",
+          "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+          "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+          "retrieved_date": "2026-08-31",
+          "note": "6.1% above $2.0 million."
+        }
+      }
+    ]
+  },
+  "deduction": {
+    "kind": "fixed",
+    "annual": {
+      "value": "125000000",
+      "unit": "cents",
+      "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+      "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "$1.25 million annual threshold."
+    }
+  },
+  "monthly_threshold": {
+    "basis": {
+      "value": "annual_x_days_in_month_over_days_in_year",
+      "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+      "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "'No. days in month divided by days in the year X $1.25 million'. Rounded to the nearest whole dollar."
+    },
+    "flat_monthly_amount": null,
+    "published_examples": []
+  },
+  "apportionment": {
+    "by_days_employed": {
+      "value": true,
+      "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+      "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "Monthly threshold is days in month / days in year x the annual threshold."
+    },
+    "by_share_of_au_wages": {
+      "value": true,
+      "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+      "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "Threshold entitlement is calculated on Australia-wide wages; where these cannot be obtained monthly, one twelfth of the previous year's Australia-wide wages may be used."
+    }
+  },
+  "surcharges": {
+    "value": [],
+    "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+    "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+    "retrieved_date": "2026-08-31",
+    "note": "No surcharge is published for Tasmania for 2026-27."
+  },
+  "contractor_exemptions": {
+    "value": null,
+    "unsourced_reason": "Exemption catalogue not retrieved in this pass.",
+    "source_name": "State Revenue Office Tasmania",
+    "source_url": "https://www.sro.tas.gov.au/payroll-tax/taxable-exempt-wages"
+  },
+  "employment_agency": {
+    "liable_party": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    },
+    "overrides_contractor_exemptions": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    }
+  },
+  "wage_inclusions": {
+    "superannuation": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    }
+  },
+  "rounding": {
+    "monthly_threshold": {
+      "value": "nearest_whole_dollar",
+      "source_name": "State Revenue Office Tasmania - Payroll tax rates and thresholds",
+      "source_url": "https://www.sro.tas.gov.au/payroll-tax/rates-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "'They are rounded to the nearest whole dollar amount.'"
+    },
+    "deductible_amount": {
+      "value": null,
+      "unsourced_reason": "No worked example of the apportioned deduction on the rates and thresholds page. The monthly threshold itself is stated as rounded to the nearest whole dollar; whether the same applies to a part-year apportionment is not stated."
+    },
+    "tax_payable": {
+      "value": null,
+      "unsourced_reason": "Not stated on the rates and thresholds page."
+    }
+  },
+  "nexus": {
+    "ruling_code": {
+      "value": "PTA039",
+      "source_name": "State Revenue Office Tasmania - PTA039",
+      "source_url": "https://www.sro.tas.gov.au/Documents/PTA039.pdf",
+      "retrieved_date": "2026-08-31",
+      "note": "Full PDF text read."
+    },
+    "provisions": {
+      "value": "ss 11, 11A, 11B, 11C, 26 Payroll Tax Act 2008 (Tas)",
+      "source_name": "State Revenue Office Tasmania - PTA039",
+      "source_url": "https://www.sro.tas.gov.au/Documents/PTA039.pdf",
+      "retrieved_date": "2026-08-31"
+    },
+    "tier_order_verified": {
+      "value": true,
+      "source_name": "State Revenue Office Tasmania - PTA039",
+      "source_url": "https://www.sro.tas.gov.au/Documents/PTA039.pdf",
+      "retrieved_date": "2026-08-31",
+      "note": "Text is word-for-word identical to Revenue NSW PTA039, including the corporate-employee PPB fallback and the more-than-50-per-cent definition in test 4."
+    }
+  }
+}

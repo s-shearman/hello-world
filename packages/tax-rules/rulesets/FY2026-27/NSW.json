@@ -1,0 +1,163 @@
+{
+  "jurisdiction": "NSW",
+  "financial_year": "FY2026-27",
+  "ruleset_version": "2026-27.1",
+  "rate": {
+    "kind": "flat",
+    "rate_ppm": {
+      "value": 54500,
+      "unit": "ppm",
+      "source_name": "Revenue NSW \u2014 Payroll tax thresholds and rates",
+      "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "5.45%. Published table row '1 July 2026 - 30 June 2027'. Page last updated 01 July 2026."
+    }
+  },
+  "deduction": {
+    "kind": "fixed",
+    "annual": {
+      "value": "120000000",
+      "unit": "cents",
+      "source_name": "Revenue NSW \u2014 Payroll tax thresholds and rates",
+      "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "$1,200,000 annual tax-free threshold for 1 July 2026 - 30 June 2027."
+    }
+  },
+  "monthly_threshold": {
+    "basis": {
+      "value": "annual_x_days_in_month_over_days_in_year",
+      "source_name": "Revenue NSW \u2014 Payroll tax thresholds and rates",
+      "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "Derived: the published 2026-27 monthly figures reproduce exactly as annual x days-in-month / 365, rounded to the nearest whole dollar."
+    },
+    "flat_monthly_amount": null,
+    "published_examples": [
+      {
+        "days_in_month": 28,
+        "days_in_year": 365,
+        "amount": {
+          "value": "9205500",
+          "unit": "cents",
+          "source_name": "Revenue NSW \u2014 Monthly threshold for the 2026-27 financial year",
+          "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+          "retrieved_date": "2026-08-31",
+          "note": "$92,055"
+        }
+      },
+      {
+        "days_in_month": 30,
+        "days_in_year": 365,
+        "amount": {
+          "value": "9863000",
+          "unit": "cents",
+          "source_name": "Revenue NSW \u2014 Monthly threshold for the 2026-27 financial year",
+          "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+          "retrieved_date": "2026-08-31",
+          "note": "$98,630"
+        }
+      },
+      {
+        "days_in_month": 31,
+        "days_in_year": 365,
+        "amount": {
+          "value": "10191800",
+          "unit": "cents",
+          "source_name": "Revenue NSW \u2014 Monthly threshold for the 2026-27 financial year",
+          "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+          "retrieved_date": "2026-08-31",
+          "note": "$101,918"
+        }
+      }
+    ]
+  },
+  "apportionment": {
+    "by_days_employed": {
+      "value": true,
+      "source_name": "Revenue NSW \u2014 Can your business claim the full annual tax-free threshold?",
+      "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "Threshold x (days staff are employed / total days in the FY)."
+    },
+    "by_share_of_au_wages": {
+      "value": true,
+      "source_name": "Revenue NSW \u2014 Can your business claim the full annual tax-free threshold?",
+      "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "Threshold x (total NSW wages / total Australian wages). Applied together with the days apportionment; see the two published worked examples."
+    },
+    "note": "Worked example 2 shows the days apportionment does not further reduce the threshold where the employer employed in other states for the whole year."
+  },
+  "surcharges": {
+    "value": [],
+    "source_name": "Revenue NSW \u2014 Payroll tax thresholds and rates",
+    "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+    "retrieved_date": "2026-08-31",
+    "note": "No payroll tax surcharge is published for NSW for 2026-27. Empty array asserts none, and is not the same as unsourced."
+  },
+  "contractor_exemptions": {
+    "value": null,
+    "unsourced_reason": "Exemption catalogue not yet retrieved. Revenue NSW publishes these across rulings PTA014 etc rather than on the rates page; not sourced in this pass.",
+    "source_name": "Revenue NSW \u2014 payroll tax rulings library",
+    "source_url": "https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings"
+  },
+  "employment_agency": {
+    "liable_party": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass. Needed before the deemed wages register can assess a labour hire arrangement."
+    },
+    "overrides_contractor_exemptions": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass. Schema-proposal 6.2 assumes it does; that assumption is unverified."
+    }
+  },
+  "wage_inclusions": {
+    "superannuation": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    }
+  },
+  "rounding": {
+    "monthly_threshold": {
+      "value": "nearest_whole_dollar",
+      "source_name": "Revenue NSW \u2014 Monthly threshold for the 2026-27 financial year",
+      "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "Inferred from the published table: all three figures are whole dollars and match round-half-up of the exact derivation."
+    },
+    "deductible_amount": {
+      "value": "exact_cents",
+      "source_name": "Revenue NSW - worked example 1, interstate and part-year apportionment",
+      "source_url": "https://www.revenue.nsw.gov.au/taxes-duties-levies-royalties/payroll-tax/rates-and-thresholds",
+      "retrieved_date": "2026-08-31",
+      "note": "$1,200,000 x ($1,000,000/$3,000,000) = $400,000, then x (184/365) = $201,643.84. Cents are retained, so the apportioned threshold is not rounded to whole dollars."
+    },
+    "tax_payable": {
+      "value": null,
+      "unsourced_reason": "Revenue NSW does not state a rounding rule for tax payable on the rates page."
+    }
+  },
+  "nexus": {
+    "ruling_code": {
+      "value": "PTA039",
+      "source_name": "Revenue NSW \u2014 Payroll tax nexus provisions (PTA039)",
+      "source_url": "https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings/payroll/pta039",
+      "retrieved_date": "2026-08-31",
+      "note": "Issued 12 May 2011, effective from 1 July 2009, status Current."
+    },
+    "provisions": {
+      "value": "ss 11, 11A, 11B, 11C, 26 Payroll Tax Act 2007 (NSW)",
+      "source_name": "Revenue NSW \u2014 PTA039",
+      "source_url": "https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings/payroll/pta039",
+      "retrieved_date": "2026-08-31"
+    },
+    "tier_order_verified": {
+      "value": true,
+      "source_name": "Revenue NSW \u2014 PTA039",
+      "source_url": "https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings/payroll/pta039",
+      "retrieved_date": "2026-08-31",
+      "note": "Full ruling text read; step 1 and tiers 1-4 confirmed against schema-proposal 4.1."
+    }
+  }
+}

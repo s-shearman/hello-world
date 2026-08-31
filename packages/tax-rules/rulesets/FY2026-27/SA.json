@@ -1,0 +1,127 @@
+{
+  "jurisdiction": "SA",
+  "financial_year": "FY2026-27",
+  "ruleset_version": "2026-27.0-unsourced",
+  "rate": {
+    "kind": "flat",
+    "rate_ppm": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    }
+  },
+  "deduction": {
+    "kind": "fixed",
+    "annual": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    }
+  },
+  "monthly_threshold": {
+    "basis": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    },
+    "flat_monthly_amount": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    },
+    "published_examples": []
+  },
+  "apportionment": {
+    "by_days_employed": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    },
+    "by_share_of_au_wages": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    }
+  },
+  "surcharges": {
+    "value": null,
+    "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md. Note this is NOT an assertion that the jurisdiction has no surcharge.",
+    "source_name": "RevenueSA",
+    "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+  },
+  "contractor_exemptions": {
+    "value": null,
+    "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+    "source_name": "RevenueSA",
+    "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+  },
+  "employment_agency": {
+    "liable_party": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    },
+    "overrides_contractor_exemptions": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    }
+  },
+  "wage_inclusions": {
+    "superannuation": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    }
+  },
+  "rounding": {
+    "monthly_threshold": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    },
+    "deductible_amount": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    },
+    "tax_payable": {
+      "value": null,
+      "unsourced_reason": "www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    }
+  },
+  "nexus": {
+    "ruling_code": {
+      "value": "PTA039",
+      "source_name": "schema-proposal.md 4.1 - harmonised ruling series",
+      "source_url": "https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings/payroll/pta039",
+      "retrieved_date": "2026-08-31",
+      "note": "PTA039 is the harmonised ruling series adopted across all eight jurisdictions. The SA equivalent itself could not be retrieved; the code is cited from the harmonised series, not from the SA publication."
+    },
+    "provisions": {
+      "value": null,
+      "unsourced_reason": "The SA Act's nexus section numbering was not retrieved. www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    },
+    "tier_order_verified": {
+      "value": null,
+      "unsourced_reason": "Not verified against the SA publication. www.revenuesa.sa.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. The ordering is confirmed against NSW, WA, TAS and VIC and the ruling is harmonised, but a SA-specific divergence would not have been visible.",
+      "source_name": "RevenueSA",
+      "source_url": "https://www.revenuesa.sa.gov.au/payrolltax"
+    }
+  }
+}

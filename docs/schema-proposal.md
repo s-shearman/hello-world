@@ -197,19 +197,37 @@ performed in one jurisdiction:
 
 | Tier | Test |
 |---|---|
-| 1 | The employee's **principal place of residence** in that month. For a corporation deemed to be an employee, its principal place of residence is taken to be its ABN address. |
-| 2 | Where the employee has no principal place of residence in any Australian jurisdiction: the **employer's registered ABN address** or principal place of business. |
-| 3 | Where the **wages are paid**. |
-| 4 | Where the services are **mainly performed**. |
+| 1 | The employee's **principal place of residence** (PPR) in that month. More than one PPR in the month → the PPR on the **last day** of that month. For a corporation deemed to be an employee — under the contractor or the employment agency provisions — its PPR is the jurisdiction of its **ABN address**; where it has no ABN address, or two or more in the jurisdiction, its **principal place of business** (PPB) in Australia, taken on the last day of the month if it changed mid-month. |
+| 2 | Where the employee has no PPR in any Australian jurisdiction: the **employer's registered ABN address**; and only where the employer has no ABN address, or two or more in *different* jurisdictions, the employer's **PPB** in Australia, taken on the last day of the month if it changed mid-month. |
+| 3 | Where the **wages are paid or payable**. Paid across several jurisdictions → tax on the **aggregate**, in the jurisdiction with the largest proportion. Where wages are paid into a bank account, the jurisdiction in which that account is held. |
+| 4 | Where the services are **mainly performed** — meaning actual time worked in the jurisdiction **exceeds 50%** of the month. |
 
-Source: Revenue NSW ruling PTA039, and the harmonised equivalents published by the
-Queensland Revenue Office, RevenueSA, RevenueWA, the ACT Revenue Office and the NT
-Territory Revenue Office. Retrieved 2026-08-30.
+**Sourcing status: confirmed against primary sources.** The step 1 test, the tier order,
+and each tier's internal sequence were verified word-for-word against the ruling text
+itself, retrieved 2026-08-31:
 
-> **Sourcing status: provisional.** This ordering was established from search results
-> summarising the official rulings; the primary documents could not be retrieved directly
-> from this environment (see §16). Confirm against the primary PDF before it is entered
-> into the ruleset as a `SourcedValue`, and have the accountant confirm application.
+| Jurisdiction | Document | Provisions | Retrieved |
+|---|---|---|---|
+| NSW | [PTA039, issued 12 May 2011, status Current](https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings/payroll/pta039) | ss 11, 11A, 11B, 11C, 26 | 2026-08-31 |
+| WA | [Revenue Ruling PTA 039.1](https://www.wa.gov.au/system/files/2025-07/ruling-pta039.pdf) | ss 6A, 6B, 6C, 6D | 2026-08-31 |
+| TAS | [PTA039](https://www.sro.tas.gov.au/Documents/PTA039.pdf) | ss 11, 11A, 11B, 11C, 26 | 2026-08-31 |
+| VIC | [Interstate wages and nexus provisions, updated 7 May 2026](https://www.sro.vic.gov.au/businesses-and-organisations/payroll-tax/wages/interstate-wages-and-nexus-provisions) | restatement of PTA039 | 2026-08-31 |
+
+The NSW and TAS texts are word-for-word identical; WA's is the same substance against its
+own section numbering. That is what "harmonised" buys us, and it is why one ruleset shape
+serves all eight jurisdictions.
+
+**QLD, SA, ACT and NT could not be retrieved.** The QLD and NT revenue office domains are
+refused by this environment's network egress policy; the SA and ACT sites sit behind a bot
+challenge that cannot be satisfied from here. Their harmonised equivalents are therefore
+*asserted but unverified* — the four above are enough to establish the ordering, but if a
+jurisdiction-specific divergence exists in one of those four, we have not seen it.
+
+> **Still outstanding, and not a sourcing question.** §15 also asks the accountant to
+> confirm *application* to our actual cases — a NSW-resident technician on a multi-week NT
+> job spanning a month boundary, and a technician who relocates mid-month. Reading the
+> ruling settles the ordering; it does not settle whether we are applying it correctly to
+> our own facts, and nothing in this tool replaces that conversation.
 
 Two consequences that are counter-intuitive and worth stating plainly:
 

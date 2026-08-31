@@ -1,0 +1,146 @@
+{
+  "jurisdiction": "WA",
+  "financial_year": "FY2026-27",
+  "ruleset_version": "2026-27.1",
+  "rate": {
+    "kind": "flat",
+    "rate_ppm": {
+      "value": 55000,
+      "unit": "ppm",
+      "source_name": "RevenueWA - Calculation: Payroll Tax Employer Guide",
+      "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+      "retrieved_date": "2026-08-31",
+      "note": "5.5% on taxable wages. Page last updated 2 June 2026."
+    }
+  },
+  "deduction": {
+    "kind": "diminishing",
+    "annual": {
+      "value": "100000000",
+      "unit": "cents",
+      "source_name": "RevenueWA - Calculation: Payroll Tax Employer Guide",
+      "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+      "retrieved_date": "2026-08-31",
+      "note": "$1,000,000 annual threshold."
+    },
+    "upper": {
+      "value": "750000000",
+      "unit": "cents",
+      "source_name": "RevenueWA - Calculation: Payroll Tax Employer Guide",
+      "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+      "retrieved_date": "2026-08-31",
+      "note": "$7,500,000 upper threshold; no deduction at or above this."
+    },
+    "tapering_value": {
+      "value": {
+        "numerator": "2",
+        "denominator": "13"
+      },
+      "unit": "rational",
+      "source_name": "RevenueWA - Calculation: Payroll Tax Employer Guide",
+      "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+      "retrieved_date": "2026-08-31",
+      "note": "TV = AT / (UT - AT) = 1,000,000 / 6,500,000, simplified to 2/13. Deduction reduces by $2 for every $13 of wages over the threshold."
+    }
+  },
+  "monthly_threshold": {
+    "basis": {
+      "value": "flat_monthly_registration_threshold",
+      "source_name": "RevenueWA - Calculation: Payroll Tax Employer Guide",
+      "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+      "retrieved_date": "2026-08-31",
+      "note": "Registration arises when monthly Australian taxable wages exceed $83,333 (from 1 July 2023)."
+    },
+    "flat_monthly_amount": {
+      "value": "8333300",
+      "unit": "cents",
+      "source_name": "RevenueWA - Calculation: Payroll Tax Employer Guide",
+      "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+      "retrieved_date": "2026-08-31",
+      "note": "$83,333 monthly Australian taxable wages registration threshold, from 1 July 2023."
+    },
+    "published_examples": []
+  },
+  "apportionment": {
+    "by_days_employed": {
+      "value": true,
+      "source_name": "RevenueWA - Calculation: Payroll Tax Employer Guide",
+      "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+      "retrieved_date": "2026-08-31",
+      "note": "'The threshold can be apportioned if you don't pay wages for a whole financial year, become a member of a group or stop being a member of a group.'"
+    },
+    "by_share_of_au_wages": {
+      "value": null,
+      "unsourced_reason": "Not stated as a separate apportionment on this page. WA handles interstate wages inside the diminishing threshold, which is computed on Australia-wide wages, so a further share apportionment may not apply - but the page does not say so and this must not be inferred."
+    },
+    "note": "The deductable amount is computed from Australia-wide wages and then applied against WA taxable wages: 'WA taxable wages - deductable amount x tax rate'."
+  },
+  "surcharges": {
+    "value": [],
+    "source_name": "RevenueWA - Calculation: Payroll Tax Employer Guide",
+    "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+    "retrieved_date": "2026-08-31",
+    "note": "The current rates table ('From 1 July 2023 -') carries no surcharge tiers. The >$100 million and >$1.5 billion tiers shown on the same page belong to the superseded 1 July 2020 - 30 June 2023 table."
+  },
+  "contractor_exemptions": {
+    "value": null,
+    "unsourced_reason": "Exemption catalogue not retrieved in this pass.",
+    "source_name": "RevenueWA",
+    "source_url": "https://www.wa.gov.au/organisation/department-of-finance/payroll-tax"
+  },
+  "employment_agency": {
+    "liable_party": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    },
+    "overrides_contractor_exemptions": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    }
+  },
+  "wage_inclusions": {
+    "superannuation": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    }
+  },
+  "rounding": {
+    "monthly_threshold": {
+      "value": null,
+      "unsourced_reason": "Not stated. The published deductable-amount example ($969,231 from $1,200,000 of wages) is a whole dollar, consistent with whole-dollar rounding but not a stated rule."
+    },
+    "deductible_amount": {
+      "value": "nearest_whole_dollar",
+      "source_name": "RevenueWA - diminishing threshold worked example",
+      "source_url": "https://www.wa.gov.au/government/multi-step-guides/payroll-tax-employer-guide/calculation-payroll-tax-employer-guide",
+      "retrieved_date": "2026-08-31",
+      "note": "$1,000,000 - [($1,200,000 - $1,000,000) x 2/13] is printed as $969,231. The exact value is $969,230.77, so RevenueWA rounds the deductable amount to whole dollars."
+    },
+    "tax_payable": {
+      "value": null,
+      "unsourced_reason": "Not stated on this page."
+    }
+  },
+  "nexus": {
+    "ruling_code": {
+      "value": "PTA 039.1",
+      "source_name": "RevenueWA - Revenue Ruling PTA 039.1 Nexus Provisions",
+      "source_url": "https://www.wa.gov.au/system/files/2025-07/ruling-pta039.pdf",
+      "retrieved_date": "2026-08-31",
+      "note": "Full PDF text read; July 2025 version."
+    },
+    "provisions": {
+      "value": "ss 6A, 6B, 6C, 6D Pay-roll Tax Assessment Act 2002 (WA)",
+      "source_name": "RevenueWA - Revenue Ruling PTA 039.1",
+      "source_url": "https://www.wa.gov.au/system/files/2025-07/ruling-pta039.pdf",
+      "retrieved_date": "2026-08-31"
+    },
+    "tier_order_verified": {
+      "value": true,
+      "source_name": "RevenueWA - Revenue Ruling PTA 039.1",
+      "source_url": "https://www.wa.gov.au/system/files/2025-07/ruling-pta039.pdf",
+      "retrieved_date": "2026-08-31",
+      "note": "Tests 1-4 read verbatim; identical substance to NSW PTA039 against WA section numbering."
+    }
+  }
+}

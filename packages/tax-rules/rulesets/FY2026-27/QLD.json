@@ -1,0 +1,127 @@
+{
+  "jurisdiction": "QLD",
+  "financial_year": "FY2026-27",
+  "ruleset_version": "2026-27.0-unsourced",
+  "rate": {
+    "kind": "flat",
+    "rate_ppm": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    }
+  },
+  "deduction": {
+    "kind": "fixed",
+    "annual": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    }
+  },
+  "monthly_threshold": {
+    "basis": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    },
+    "flat_monthly_amount": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    },
+    "published_examples": []
+  },
+  "apportionment": {
+    "by_days_employed": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    },
+    "by_share_of_au_wages": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    }
+  },
+  "surcharges": {
+    "value": null,
+    "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md. Note this is NOT an assertion that the jurisdiction has no surcharge.",
+    "source_name": "Queensland Revenue Office",
+    "source_url": "https://qro.qld.gov.au/payroll-tax/"
+  },
+  "contractor_exemptions": {
+    "value": null,
+    "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+    "source_name": "Queensland Revenue Office",
+    "source_url": "https://qro.qld.gov.au/payroll-tax/"
+  },
+  "employment_agency": {
+    "liable_party": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    },
+    "overrides_contractor_exemptions": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    }
+  },
+  "wage_inclusions": {
+    "superannuation": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    }
+  },
+  "rounding": {
+    "monthly_threshold": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    },
+    "deductible_amount": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    },
+    "tax_payable": {
+      "value": null,
+      "unsourced_reason": "qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    }
+  },
+  "nexus": {
+    "ruling_code": {
+      "value": "PTA039",
+      "source_name": "schema-proposal.md 4.1 - harmonised ruling series",
+      "source_url": "https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings/payroll/pta039",
+      "retrieved_date": "2026-08-31",
+      "note": "PTA039 is the harmonised ruling series adopted across all eight jurisdictions. The QLD equivalent itself could not be retrieved; the code is cited from the harmonised series, not from the QLD publication."
+    },
+    "provisions": {
+      "value": null,
+      "unsourced_reason": "The QLD Act's nexus section numbering was not retrieved. qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    },
+    "tier_order_verified": {
+      "value": null,
+      "unsourced_reason": "Not verified against the QLD publication. qro.qld.gov.au is refused by this environment's network egress policy (gateway answered 403 to CONNECT). Alternate official hosts www.qld.gov.au, business.qld.gov.au and www.treasury.qld.gov.au are refused the same way. The ordering is confirmed against NSW, WA, TAS and VIC and the ruling is harmonised, but a QLD-specific divergence would not have been visible.",
+      "source_name": "Queensland Revenue Office",
+      "source_url": "https://qro.qld.gov.au/payroll-tax/"
+    }
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "jurisdiction": "VIC",
+  "financial_year": "FY2026-27",
+  "ruleset_version": "2026-27.1",
+  "rate": {
+    "kind": "flat",
+    "rate_ppm": {
+      "value": 48500,
+      "unit": "ppm",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+      "retrieved_date": "2026-08-31",
+      "note": "4.85%. Table row 'From 1 July 2025 onward'. Page updated 10 July 2026."
+    },
+    "regional_rate_ppm": {
+      "value": 12125,
+      "unit": "ppm",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+      "retrieved_date": "2026-08-31",
+      "note": "1.2125% for regional Victorian employers."
+    }
+  },
+  "deduction": {
+    "kind": "phase_out",
+    "annual": {
+      "value": "100000000",
+      "unit": "cents",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+      "retrieved_date": "2026-08-31",
+      "note": "$1,000,000 annual maximum deduction."
+    },
+    "phase_out_from": {
+      "value": "300000000",
+      "unit": "cents",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+      "retrieved_date": "2026-08-31",
+      "note": "$3,000,000 - deduction begins to phase out above this."
+    },
+    "phase_out_to": {
+      "value": "500000000",
+      "unit": "cents",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+      "retrieved_date": "2026-08-31",
+      "note": "$5,000,000 - no deduction above this."
+    },
+    "phase_out_rate_ppm": {
+      "value": 500000,
+      "unit": "ppm",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+      "retrieved_date": "2026-08-31",
+      "note": "50% from 1 July 2025 and each subsequent financial year (45% in 2024-25)."
+    }
+  },
+  "monthly_threshold": {
+    "basis": {
+      "value": "flat_monthly_maximum_deduction",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+      "retrieved_date": "2026-08-31",
+      "note": "$83,333 monthly maximum deduction, published as a flat figure rather than derived from days in the month."
+    },
+    "flat_monthly_amount": {
+      "value": "8333300",
+      "unit": "cents",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+      "retrieved_date": "2026-08-31",
+      "note": "$83,333 monthly maximum deduction, from 1 July 2025 onward."
+    },
+    "published_examples": []
+  },
+  "apportionment": {
+    "by_days_employed": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass. The current-rates page does not state a days apportionment rule.",
+      "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+      "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates"
+    },
+    "by_share_of_au_wages": {
+      "value": true,
+      "source_name": "State Revenue Office Victoria - Interstate wages and nexus provisions",
+      "source_url": "https://www.sro.vic.gov.au/businesses-and-organisations/payroll-tax/wages/interstate-wages-and-nexus-provisions",
+      "retrieved_date": "2026-08-31",
+      "note": "Worked example: $83,333 monthly threshold x $2,000,000 Victorian wages / $6,000,000 Australian wages = $27,777.67."
+    },
+    "note": "The Victorian share apportionment is sourced from the worked example on the nexus page; the days basis is not stated there."
+  },
+  "surcharges": {
+    "value": [
+      {
+        "code": "mhw_covid_combined_tier1",
+        "label": "Mental health and wellbeing surcharge + COVID-19 debt temporary surcharge (combined, tier 1)",
+        "applies_above_au_wide_wages": {
+          "value": "1000000000",
+          "unit": "cents",
+          "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+          "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+          "retrieved_date": "2026-08-31",
+          "note": "$10,000,000 first annual threshold; $833,333 monthly."
+        },
+        "rate_ppm": {
+          "value": 10000,
+          "unit": "ppm",
+          "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+          "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+          "retrieved_date": "2026-08-31",
+          "note": "Combined 1% for national payroll above $10 million."
+        },
+        "on_excess_only": {
+          "value": true,
+          "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+          "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+          "retrieved_date": "2026-08-31",
+          "note": "'The surcharges only apply to businesses' Victorian share of wages over these thresholds.'"
+        }
+      },
+      {
+        "code": "mhw_covid_combined_tier2",
+        "label": "Mental health and wellbeing surcharge + COVID-19 debt temporary surcharge (combined, tier 2)",
+        "applies_above_au_wide_wages": {
+          "value": "10000000000",
+          "unit": "cents",
+          "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+          "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+          "retrieved_date": "2026-08-31",
+          "note": "$100,000,000."
+        },
+        "rate_ppm": {
+          "value": 20000,
+          "unit": "ppm",
+          "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+          "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+          "retrieved_date": "2026-08-31",
+          "note": "Combined 2% for national payroll above $100 million."
+        },
+        "on_excess_only": {
+          "value": true,
+          "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+          "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+          "retrieved_date": "2026-08-31",
+          "note": "As tier 1."
+        }
+      }
+    ],
+    "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+    "source_url": "https://www.sro.vic.gov.au/payroll-tax-current-rates",
+    "retrieved_date": "2026-08-31",
+    "note": "The page publishes COMBINED surcharge rates only. The split between the mental health and wellbeing surcharge (from 1 January 2022) and the COVID-19 debt temporary surcharge (1 July 2023 to 30 June 2033) is not broken out, so the two cannot be reported separately from this source."
+  },
+  "contractor_exemptions": {
+    "value": null,
+    "unsourced_reason": "Exemption catalogue not retrieved in this pass.",
+    "source_name": "State Revenue Office Victoria - Payroll tax (current rates)",
+    "source_url": "https://www.sro.vic.gov.au/payroll-tax"
+  },
+  "employment_agency": {
+    "liable_party": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    },
+    "overrides_contractor_exemptions": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    }
+  },
+  "wage_inclusions": {
+    "superannuation": {
+      "value": null,
+      "unsourced_reason": "Not retrieved in this pass."
+    }
+  },
+  "rounding": {
+    "monthly_threshold": {
+      "value": null,
+      "unsourced_reason": "Not stated on the current-rates page. The published worked example carries cents ($27,777.67), which is evidence against whole-dollar rounding but is not a stated rule."
+    },
+    "deductible_amount": {
+      "value": "exact_cents",
+      "source_name": "State Revenue Office Victoria - monthly deduction worked example",
+      "source_url": "https://www.sro.vic.gov.au/businesses-and-organisations/payroll-tax/wages/interstate-wages-and-nexus-provisions",
+      "retrieved_date": "2026-08-31",
+      "note": "$83,333 x $2,000,000/$6,000,000 = $27,777.67. Cents retained."
+    },
+    "tax_payable": {
+      "value": null,
+      "unsourced_reason": "Not stated. Worked example gives $592.78, i.e. cents are retained."
+    }
+  },
+  "nexus": {
+    "ruling_code": {
+      "value": "PTA039",
+      "source_name": "State Revenue Office Victoria - Interstate wages and nexus provisions",
+      "source_url": "https://www.sro.vic.gov.au/businesses-and-organisations/payroll-tax/wages/interstate-wages-and-nexus-provisions",
+      "retrieved_date": "2026-08-31",
+      "note": "Page updated 7 May 2026; restates the harmonised four-step test and links Revenue Ruling PTA-039."
+    },
+    "provisions": {
+      "value": "Payroll Tax Act 2007 (Vic) nexus provisions",
+      "source_name": "State Revenue Office Victoria",
+      "source_url": "https://www.sro.vic.gov.au/legislation/nexus-provisions",
+      "retrieved_date": "2026-08-31"
+    },
+    "tier_order_verified": {
+      "value": true,
+      "source_name": "State Revenue Office Victoria - Interstate wages and nexus provisions",
+      "source_url": "https://www.sro.vic.gov.au/businesses-and-organisations/payroll-tax/wages/interstate-wages-and-nexus-provisions",
+      "retrieved_date": "2026-08-31",
+      "note": "Four-step order confirmed: PPR, employer ABN/PPB, where wages are paid (incl. bank account), more than 50% of time worked."
+    }
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "jurisdiction": "NT",
+  "financial_year": "FY2026-27",
+  "ruleset_version": "2026-27.0-unsourced",
+  "rate": {
+    "kind": "flat",
+    "rate_ppm": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    }
+  },
+  "deduction": {
+    "kind": "fixed",
+    "annual": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    }
+  },
+  "monthly_threshold": {
+    "basis": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    },
+    "flat_monthly_amount": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    },
+    "published_examples": []
+  },
+  "apportionment": {
+    "by_days_employed": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    },
+    "by_share_of_au_wages": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    }
+  },
+  "surcharges": {
+    "value": null,
+    "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md. Note this is NOT an assertion that the jurisdiction has no surcharge.",
+    "source_name": "Territory Revenue Office",
+    "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+  },
+  "contractor_exemptions": {
+    "value": null,
+    "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+    "source_name": "Territory Revenue Office",
+    "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+  },
+  "employment_agency": {
+    "liable_party": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    },
+    "overrides_contractor_exemptions": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    }
+  },
+  "wage_inclusions": {
+    "superannuation": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    }
+  },
+  "rounding": {
+    "monthly_threshold": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    },
+    "deductible_amount": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    },
+    "tax_payable": {
+      "value": null,
+      "unsourced_reason": "treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). Value not filled from memory, per CLAUDE.md.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    }
+  },
+  "nexus": {
+    "ruling_code": {
+      "value": "PTA039",
+      "source_name": "schema-proposal.md 4.1 - harmonised ruling series",
+      "source_url": "https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings/payroll/pta039",
+      "retrieved_date": "2026-08-31",
+      "note": "PTA039 is the harmonised ruling series adopted across all eight jurisdictions. The NT equivalent itself could not be retrieved; the code is cited from the harmonised series, not from the NT publication."
+    },
+    "provisions": {
+      "value": null,
+      "unsourced_reason": "The NT Act's nexus section numbering was not retrieved. treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT).",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    },
+    "tier_order_verified": {
+      "value": null,
+      "unsourced_reason": "Not verified against the NT publication. treasury.nt.gov.au and nt.gov.au are refused by this environment's network egress policy (gateway answered 403 to CONNECT). The ordering is confirmed against NSW, WA, TAS and VIC and the ruling is harmonised, but a NT-specific divergence would not have been visible.",
+      "source_name": "Territory Revenue Office",
+      "source_url": "https://treasury.nt.gov.au/dtf/territory-revenue-office/payroll-tax"
+    }
+  }
+}

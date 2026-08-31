@@ -1,0 +1,127 @@
+{
+  "jurisdiction": "ACT",
+  "financial_year": "FY2026-27",
+  "ruleset_version": "2026-27.0-unsourced",
+  "rate": {
+    "kind": "flat",
+    "rate_ppm": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    }
+  },
+  "deduction": {
+    "kind": "fixed",
+    "annual": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    }
+  },
+  "monthly_threshold": {
+    "basis": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    },
+    "flat_monthly_amount": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    },
+    "published_examples": []
+  },
+  "apportionment": {
+    "by_days_employed": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    },
+    "by_share_of_au_wages": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    }
+  },
+  "surcharges": {
+    "value": null,
+    "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md. Note this is NOT an assertion that the jurisdiction has no surcharge.",
+    "source_name": "ACT Revenue Office",
+    "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+  },
+  "contractor_exemptions": {
+    "value": null,
+    "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+    "source_name": "ACT Revenue Office",
+    "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+  },
+  "employment_agency": {
+    "liable_party": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    },
+    "overrides_contractor_exemptions": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    }
+  },
+  "wage_inclusions": {
+    "superannuation": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    }
+  },
+  "rounding": {
+    "monthly_threshold": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    },
+    "deductible_amount": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    },
+    "tax_payable": {
+      "value": null,
+      "unsourced_reason": "www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. Value not filled from memory, per CLAUDE.md.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    }
+  },
+  "nexus": {
+    "ruling_code": {
+      "value": "PTA039",
+      "source_name": "schema-proposal.md 4.1 - harmonised ruling series",
+      "source_url": "https://www.revenue.nsw.gov.au/help-centre/resources-library/rulings/payroll/pta039",
+      "retrieved_date": "2026-08-31",
+      "note": "PTA039 is the harmonised ruling series adopted across all eight jurisdictions. The ACT equivalent itself could not be retrieved; the code is cited from the harmonised series, not from the ACT publication."
+    },
+    "provisions": {
+      "value": null,
+      "unsourced_reason": "The ACT Act's nexus section numbering was not retrieved. www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    },
+    "tier_order_verified": {
+      "value": null,
+      "unsourced_reason": "Not verified against the ACT publication. www.revenue.act.gov.au reaches origin but returns a Cloudflare managed bot challenge (403, cf-mitigated: challenge) that cannot be satisfied from this environment, including via headless Chromium. The ordering is confirmed against NSW, WA, TAS and VIC and the ruling is harmonised, but a ACT-specific divergence would not have been visible.",
+      "source_name": "ACT Revenue Office",
+      "source_url": "https://www.revenue.act.gov.au/payroll-tax"
+    }
+  }
+}
