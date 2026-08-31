@@ -479,5 +479,3 @@ export function surchargeOn(ruleset: Ruleset, facts: ApportionmentFacts): Traced
   }
   return { result: total, trace, citations };
 }
-
-export type { Jurisdiction };
