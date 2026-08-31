@@ -1,7 +1,6 @@
 import type { Cents, Jurisdiction, Ruleset } from '../types.ts';
-import { cite, type Citation } from '../sourced-value.ts';
+import { cite, isSourced, type Citation } from '../sourced-value.ts';
 import type { Traced, TraceStep } from '../trace.ts';
-import { isSourced } from '../sourced-value.ts';
 
 /**
  * PTA039 — Payroll Tax Nexus Provisions. Harmonised across all eight jurisdictions and
