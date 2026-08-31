@@ -178,11 +178,26 @@ March apportions correctly without anyone maintaining a days field.
 ### 4.1 Nexus — where a wage is taxed
 
 You told me crews cross state lines, which makes this load-bearing rather than an edge
-case. Wages for a month are sourced to **one** jurisdiction by a defined hierarchy
-(the harmonised rule considers, in order, where the employee's services were mainly
-performed, the employee's principal place of residence, the employer's registered ABN
-address, and the place of payment). The exact ordering and tests come from the ruleset,
-not from code:
+case.
+
+Two things are structural and settled. **Wages for a month are sourced to exactly one
+jurisdiction** — never split across states for the same employee in the same month. And
+that jurisdiction is decided by a defined hierarchy of tests, applied in order until one
+resolves.
+
+The limbs the harmonised provisions draw on are the employee's principal place of
+residence, where the services were performed, the employer's registered business address,
+and the place of payment. **The order those limbs are applied in, and the tests inside
+each, are a sourced value like any rate** — they come from the ruleset, not from this
+document and not from anyone's recollection.
+
+One consequence is worth stating because it is counter-intuitive and expensive to get
+wrong: **place of payment cannot be the primary test.** If it were, every multi-state
+employer would run payroll from the lowest-rate jurisdiction and the scheme would not
+function. Where the payroll is run, and where the entity is registered, are not what
+decides this.
+
+The schema records the answer and its reasoning per person per period:
 
 ```
 wage_nexus_determination
@@ -1456,6 +1471,11 @@ Three different conversations, and running them as one is how a tool like this s
 the outputs rather than the design:
 
 - Nexus treatment for shared roles: the VIC-based procurement manager (§5.5).
+- **The nexus hierarchy itself**: the order the limbs are applied in, and whether a short
+  interstate trip (a NSW technician spending a week in NT) can move a month's wages. §4.1
+  deliberately does not assert an ordering.
+- Whether any wages sourced outside NSW, VIC, QLD and WA trigger a registration
+  obligation in that jurisdiction, and at what point.
 - Classification of your labour hire and subcontract arrangements, and which contractor
   exemptions are genuinely available and evidenced (§6.1).
 - Whether the admin charge and the sell rate are currently double-recovering overhead
