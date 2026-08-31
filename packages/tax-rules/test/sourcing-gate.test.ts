@@ -5,7 +5,6 @@ import {
   UnsourcedRulesetError,
   assertCanComputeBaseTax,
   findSourcingGaps,
-  isSourced,
   loadAllRulesets,
   loadRuleset,
   sourcingReport,
@@ -14,6 +13,7 @@ import {
   assessContractorPayment,
   assessArrangement,
 } from '../src/index.ts';
+import { mustBeSourced, mustBeUnsourced, mustExist } from './assert-sourced.ts';
 
 const FY = 'FY2026-27';
 
@@ -72,7 +72,9 @@ describe('the gate refuses a figure and names which values are unsourced', () =>
       assert.throws(
         () => assertCanComputeBaseTax(rs),
         (err: unknown) => {
-          assert.ok(err instanceof UnsourcedRulesetError);
+          if (!(err instanceof UnsourcedRulesetError)) {
+            throw new Error(`expected an UnsourcedRulesetError, got ${String(err)}`);
+          }
           assert.match(err.message, /Refusing to produce a payroll tax figure/);
           assert.match(err.message, new RegExp(j));
           assert.match(err.message, /\.rate/, 'the message must name the field, not just the jurisdiction');
@@ -85,8 +87,10 @@ describe('the gate refuses a figure and names which values are unsourced', () =>
 
   test('the refusal reason explains why, so the gap is actionable', () => {
     const gaps = findSourcingGaps(loadRuleset(FY, 'QLD'));
-    const rate = gaps.find((g) => g.path === '.rate.rate_ppm');
-    assert.ok(rate, 'the rate gap must be reported');
+    const rate = mustExist(
+      gaps.find((g) => g.path === '.rate.rate_ppm'),
+      'the .rate.rate_ppm gap',
+    );
     assert.match(rate.reason, /egress policy|CONNECT/, 'the reason names the actual obstacle');
     assert.match(rate.reason, /not filled from memory/i);
   });
@@ -123,20 +127,20 @@ describe('the gate refuses a figure and names which values are unsourced', () =>
 describe('an empty array asserts "none"; null means "we have not looked"', () => {
   test('NSW asserts no surcharge, with a source', () => {
     const nsw = loadRuleset(FY, 'NSW');
-    assert.ok(isSourced(nsw.surcharges));
+    mustBeSourced(nsw.surcharges, 'NSW surcharges');
     assert.deepEqual(nsw.surcharges.value, []);
     assert.match(nsw.surcharges.source_url, /^https:\/\//);
   });
 
   test('QLD does not assert that, and says so explicitly', () => {
     const qld = loadRuleset(FY, 'QLD');
-    assert.ok(!isSourced(qld.surcharges));
+    mustBeUnsourced(qld.surcharges, 'QLD surcharges');
     assert.match(qld.surcharges.unsourced_reason, /NOT an assertion/);
   });
 
   test('Victoria carries two surcharge tiers and flags the combined-rate limitation', () => {
     const vic = loadRuleset(FY, 'VIC');
-    assert.ok(isSourced(vic.surcharges));
+    mustBeSourced(vic.surcharges, 'VIC surcharges');
     assert.equal(vic.surcharges.value.length, 2);
     assert.match(String(vic.surcharges.note), /COMBINED/);
   });

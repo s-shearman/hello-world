@@ -2,7 +2,8 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { loadRuleset } from '../src/load.ts';
 import { apportionedDeduction, deductibleAmount, monthlyThreshold, rateFor, taxPayable } from '../src/rules/threshold.ts';
-import { applyPpm, centsToDollars, divRoundHalfUp, dollarsToCents, isSourced } from '../src/index.ts';
+import { applyPpm, centsToDollars, divRoundHalfUp, dollarsToCents } from '../src/index.ts';
+import { mustBeSourced } from './assert-sourced.ts';
 
 const FY = 'FY2026-27';
 
@@ -38,7 +39,7 @@ describe('Revenue NSW worked examples — interstate and part-year apportionment
 
   test('published monthly thresholds reproduce from the derivation', () => {
     for (const ex of nsw.monthly_threshold.published_examples) {
-      assert.ok(isSourced(ex.amount), 'published example must be sourced');
+      mustBeSourced(ex.amount, `the ${ex.days_in_month}-day published example`);
       const out = monthlyThreshold(nsw, ex.days_in_month, ex.days_in_year);
       assert.equal(
         out.result,

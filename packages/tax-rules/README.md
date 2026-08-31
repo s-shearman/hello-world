@@ -63,19 +63,33 @@ thresholds.
 
 ## Running the tests
 
+No install needed for the test suite — Node 22.6+ strips the type annotations itself:
+
 ```
-node --experimental-strip-types --test test/*.test.ts
+node --experimental-strip-types --test test/*.test.ts     # 44 tests
 ```
+
+The typecheck does need dependencies:
+
+```
+npm install -D typescript @types/node
+npm run typecheck                                          # tsc --noEmit
+```
+
+`@types/node` is not optional. Without it `src/load.ts` cannot resolve `node:fs`,
+`node:url` or `node:path`, `import.meta.url` has no type, and every `node:test` import in
+the suite fails — which also suppresses the narrowing that the tests depend on, producing
+a second wave of errors that are really the first one in disguise.
 
 **A deviation to be aware of.** §2.2 settles Vitest as the test runner, and these tests
-are written against `node:test` instead. The npm registry is refused by this
-environment's egress policy, so Vitest and TypeScript cannot be installed here, and the
-choice was between tests that run and tests that merely exist. The assertions port to
-Vitest almost one-for-one (`describe`/`test` are already the same shape; only the imports
-change) and should be ported as soon as a dependency install is possible.
+are written against `node:test` instead. The npm registry is refused by the environment
+this package was built in, so the choice was between tests that run and tests that merely
+exist. The assertions port to Vitest almost one-for-one (`describe`/`test` are already
+the same shape; only the imports change) and should be ported when convenient.
 
-The same constraint means **`tsc` has never been run against this package**. The types are
-written for `strict` with `exactOptionalPropertyTypes` and `noUncheckedIndexedAccess`, and
-the runtime behaviour is covered by 44 passing tests, but the central compile-time claim —
-that a bare number will not satisfy any signature here — is unverified until someone can
-run `npm run typecheck`. Treat that as outstanding, not as done.
+**Typecheck status.** The first `tsc` run found 18 errors, all in the test suite and the
+toolchain configuration — none in the rule logic. They are fixed. What that run could
+*not* establish is a clean `src/`: `load.ts`'s imports failed to resolve, so the compiler
+never checked the file properly. Until `npm run typecheck` passes end to end on a machine
+with `@types/node` installed, treat the non-negotiable that a bare number will not compile
+as supported by the design but not yet proven.
