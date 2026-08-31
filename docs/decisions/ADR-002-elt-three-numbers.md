@@ -7,7 +7,7 @@ Advisors: CTO, CPO, CFO
 
 ## Context
 
-`docs/schema-proposal.md` §11 defines six outputs. `CLAUDE.md` commits the ELT
+`docs/schema-proposal.md` §11 defines seven outputs, six of them dashboards. `CLAUDE.md` commits the ELT
 view to a position and a decision — three numbers, not a dashboard — so the
 choice is zero-sum. Whichever three win become what the board asks about
 monthly, and therefore what the business optimises.

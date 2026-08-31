@@ -363,7 +363,7 @@ Two mechanisms, deliberately unconnected:
 |---|---|---|
 | Which state taxes the wage? | `wage_nexus_determination` (§4.1) | **VIC, 100%. No split.** |
 | Which offices bear the cost? | `cost_allocation` (below) | Spread across all four |
-| How does that cost reach a rate? | `overhead_policy` (§11.7) | Per office, after allocation |
+| How does that cost reach a rate? | `overhead_policy` (§11.8) | Per office, after allocation |
 
 #### The allocation tables
 
@@ -1170,10 +1170,22 @@ payroll tax at the **marginal** rate enters the cost rate.
 
 ## 11. Outputs → how each is served
 
+Seven outputs. §11.8 is machinery rather than a dashboard, and is documented here because
+§11.7 and §11.4 both depend on it.
+
+**ADR-002** settles which three lead the ELT view, and in what order: coverage position
+(§11.7), the week we run out (§11.2), and payroll tax headroom against the worst state
+(§11.1). Rate card margin (§11.4) is deliberately not among them. Everything else in this
+section is built and reachable; it simply is not what the board opens on.
+
 ### 11.1 Exposure dashboard
 Per jurisdiction: taxable wages (own + deemed), apportioned threshold with its
 apportionment working, tax payable, position against threshold, and headroom in dollars
 to the next threshold or surcharge boundary. Every figure traceable to §10.
+
+Per ADR-002 the ELT view takes **headroom, not the total**: a total is a number you look at,
+headroom is a distance to where behaviour must change. The total remains on the dashboard for
+finance.
 
 ### 11.2 Capacity dashboard
 Raw and effective hours side by side at every level — office, state, role, period.
@@ -1194,6 +1206,10 @@ after-hours, weekend, public holiday, project override), margin in dollars and p
 contribution after overhead under each of the three recovery methods, and the utilisation
 required to break even. Any role whose sell rate does not cover actual cost is
 highlighted, ranked by annualised dollars lost rather than by percentage.
+
+Per ADR-002 this is **not** an ELT number — no ELT member reprices a role from a board pack,
+and the decision sits with commercial and state managers who need exactly the per-role,
+per-state detail the ELT view excludes. It remains a first-class output for them.
 
 Each rate is tested against the right cost base for its `overhead_treatment` (§L5.7):
 direct cost for rates recovered via the admin charge, fully loaded cost for rates that
@@ -1234,35 +1250,10 @@ actuals or against another scenario on total cost, margin, capacity and threshol
 position. Because the calc engine is pure and runs in the browser, editing a scenario
 updates every figure without a save.
 
-### 11.7 Overhead attribution and recovery — two stages, not one
+### 11.7 Coverage position
 
-Shared roles (§5.5) make this a two-stage problem, and conflating the stages is how
-office P&Ls become unarguable-with:
-
-```
-stage 1  ATTRIBUTION   person cost + operating expenses → offices   via cost_allocation
-stage 2  RECOVERY      office overhead pool → rate per hour         via overhead_policy
-```
-
-The pool is **non-billable role cost plus allocated operating expenses** (Layer 5). The
-rate build-up shows the overhead loading as its own visible line, broken down by category
-group, rather than folded invisibly into one number — so when a cost rate moves you can
-see whether it was a pay review or the warehouse lease.
-
-```
-overhead_policy
-  scenario_id, method       per_billable_hour | per_office | by_revenue_share
-  params jsonb, note
-```
-
-All three recovery methods are computed on every run and shown together, because they
-give different answers and the difference is itself the information. One is marked as
-your reporting default.
-
-#### The coverage test — the primary output
-
-Your test is simple, and the tool should lead with it rather than bury it under recovery
-methods:
+**The primary output for the ELT view** (ADR-002). Your test is simple, and the tool leads
+with it rather than burying it under recovery methods:
 
 > **Does the admin charge, at conservative revenue, cover the non-billable staff cost?**
 
@@ -1278,9 +1269,9 @@ coverage_position                                   -- derived, per office and n
 One gauge, three numbers: coverage percentage, dollars over or short, and the fee that closes
 the gap. The hire decision reads straight off it — *"adding a Perth warehouse person takes
 coverage from 108% to 94%; holding coverage at 100% moves the admin fee from 7.5% to 8.1%."*
-That is the whole loop you described, on one screen.
+That is the whole loop, on one screen.
 
-Two things that will bite if left implicit:
+Three things that will bite if left implicit:
 
 **The pool includes absorbed function cost (§L5.3.1), not just people with non-billable job
 titles.** Warehousing done by a technician at a site with no warehouse person is warehouse cost;
@@ -1298,7 +1289,7 @@ state across its threshold costs more than the hire before it. The coverage test
 marginal rate, so the fee impact of the *next* head is right even when the average looked
 comfortable.
 
-#### Coverage per state, not only nationally
+#### 11.7.1 Coverage per state, not only nationally
 
 One warehouse worker per state makes warehousing a **local** cost — allocated 100% to its own
 office, not a shared national role like procurement, finance and head of projects. So the pool
@@ -1315,17 +1306,43 @@ of the hours sold. National coverage can read 105% while WA sits at 80%, and the
 figure on its own will tell you everything is fine. The view reports both, and defaults to
 showing the worst state alongside the national number.
 
-#### Behind that — the recovery detail
+---
+
+### 11.8 Overhead attribution and recovery — the machinery behind 11.7
+
+Not a dashboard in its own right. This is how the numbers in §11.7 and the cost rates in
+§11.4 are produced, and it is documented separately because conflating its two stages is how
+office P&Ls become unarguable-with.
+
+Shared roles (§5.5) make this a two-stage problem:
 
 ```
+stage 1  ATTRIBUTION   person cost + operating expenses → offices   via cost_allocation
+stage 2  RECOVERY      office overhead pool → rate per hour         via overhead_policy
+```
+
+The pool is **non-billable role cost plus allocated operating expenses** (Layer 5). The
+rate build-up shows the overhead loading as its own visible line, broken down by category
+group, rather than folded invisibly into one number — so when a cost rate moves you can
+see whether it was a pay review or the warehouse lease.
+
+```
+overhead_policy
+  scenario_id, method       per_billable_hour | per_office | by_revenue_share
+  params jsonb, note
+
 overhead_recovery_position                          -- derived, per pool
   office_id, recovery_pool_id, period
-  overhead_cost_allocated_cents                     -- what landed here (L5.5)
+  overhead_cost_allocated_cents                     -- what landed here (§L5.5)
   overhead_recovered_cents                          -- what the charge collected
   variance_cents, recovery_pct
 ```
 
-Three further views come off it:
+All three recovery methods are computed on every run and shown together, because they give
+different answers and the difference is itself the information. One is marked as your
+reporting default.
+
+Three further views come off `overhead_recovery_position`:
 
 1. **Recovery position** per office, per period, cumulative for the year. *"The admin charge
    recovers 82% of non-billable cost in QLD."*
@@ -1420,7 +1437,11 @@ None of these block me starting; each changes a detail:
    job types.
 4. CSV importers, so you can load a real headcount and see real numbers early.
 5. API with the demand endpoint documented in OpenAPI.
-6. The six dashboards, exposure and capacity first.
+6. The dashboards, in the order ADR-002 sets: **capacity first** (§11.2), then payroll tax
+   headroom (§11.1), then coverage position (§11.7). Capacity is the only one computable
+   before the rulesets are sourced, and its blocker — efficiency ratings written down and
+   attributed — is work that must happen regardless. Ruleset sourcing runs in parallel from
+   step 1. The remaining outputs follow.
 
 I would rather show you working numbers for your actual headcount at step 4 than a
 complete UI over invented data.
